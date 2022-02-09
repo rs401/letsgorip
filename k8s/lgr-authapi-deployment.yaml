@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lgr-authapi
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lgr-authapi
+  template:
+    metadata:
+      labels:
+        app: lgr-authapi
+    spec:
+      containers:
+      - name: lgr-authapi
+        image: rs401/letsgoripauthapi:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: "1"
+          requests:
+            memory: 256Mi
+            cpu: "0.2"
+        ports:
+          - containerPort: 9000
+        env:
+          - name: API_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-authapi-config
+                key: api_port
+          - name: AUTHSVC_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-authapi-config
+                key: authsvc_host
+          - name: AUTHSVC_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-authapi-config
+                key: authsvc_port
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: lgr-authapi-secrets
+                key: jwt_secret
+          - name: REFRESH_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: lgr-authapi-secrets
+                key: refresh_secret
