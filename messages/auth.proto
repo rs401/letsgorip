@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/rs401/letsgorip/pb";
+
+message User {
+    uint64 id = 1;
+    string name = 2;
+    string email = 3;
+    string password = 4;
+    UserRole role = 5;
+    int64 created_at = 6;
+    int64 updated_at = 7;
+}
+
+enum UserRole {
+    DEFAULT = 0;
+    ADMIN = 1;
+}
+
+message GetUserRoleResponse {
+    UserRole role = 1;
+}
+
+message GetUserRequest {
+    uint64 id = 1;
+}
+
+message ListUsersRequest {}
+
+message DeleteUserResponse {
+    uint64 id = 1;
+}
+
+message SignInRequest {
+    string email = 1;
+    string password = 2;
+}
+
+message SignInResponse {
+    User user = 1;
+    string token = 2;
+}
+
+message AddUserToRoleRequest {
+    uint64 user_id = 1;
+    UserRole role = 2;
+}
+
+service AuthService {
+    rpc SignUp(User) returns (User);
+    rpc SignIn(SignInRequest) returns (SignInResponse);
+    rpc GetUser(GetUserRequest) returns (User);
+    rpc GetUserRole(GetUserRequest) returns (GetUserRoleResponse);
+    rpc AddUserToRole(AddUserToRoleRequest) returns (User);
+    rpc ListUsers(ListUsersRequest) returns (stream User);
+    rpc UpdateUser(User) returns (User);
+    rpc DeleteUser(GetUserRequest) returns (DeleteUserResponse);
+}

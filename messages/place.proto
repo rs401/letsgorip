@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/rs401/letsgorip/pb";
+
+message Place {
+    uint64 id = 1;
+    uint64 user_id = 2;
+    uint64 state_id = 3;
+    double name = 4;
+    double latitude = 5;
+    double longitude = 6;
+}
+
+message PlaceIdRequest {
+    uint64 id = 1;
+}
+
+message PlaceIdResponse {
+    uint64 id = 1;
+}
+
+message GetPlacesRequest {
+    uint64 state_id = 1;
+}
+
+service PlaceService {
+    rpc CreatePlace(Place) returns (PlaceIdResponse);
+    rpc GetPlace(PlaceIdRequest) returns (PlaceIdResponse);
+    rpc GetPlaces(GetPlacesRequest) returns (stream Place);
+    rpc UpdatePlace(Place) returns (PlaceIdResponse);
+    rpc DeletePlace(PlaceIdRequest) returns (PlaceIdResponse);
+}

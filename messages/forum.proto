@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package pb;
+
+option go_package = "github.com/rs401/letsgorip/pb";
+
+message Forum {
+    uint64 id = 1;
+    uint64 user_id = 2;
+    string title = 3;
+    string description = 4;
+    repeated Thread threads = 5;
+    int64 created_at = 6;
+    int64 updated_at = 7;
+}
+
+
+message Thread {
+    uint64 id = 1;
+    uint64 forum_id = 2;
+    uint64 user_id = 3;
+    string title = 4;
+    string msg = 5;
+    repeated Post posts = 6;
+    int64 created_at = 7;
+    int64 updated_at = 8;
+}
+
+message Post {
+    uint64 id = 1;
+    uint64 thread_id = 2;
+    uint64 user_id = 3;
+    string name = 4;
+    string msg = 5;
+    repeated Post posts = 6;
+    int64 created_at = 7;
+    int64 updated_at = 8;
+}
+
+// message GetForumRequest {
+//     uint64 id = 1;
+// }
+
+message GetForumResponse {
+    Forum forum = 1;
+}
+
+message GetForumsRequest {}
+
+message GetForumsResponse {
+    repeated Forum forums = 1;
+}
+
+// message GetThreadRequest {
+//     uint64 id = 1;
+// }
+
+message GetThreadResponse {
+    Thread thread = 1;
+}
+
+message GetThreadsRequest {}
+
+message GetThreadsResponse {
+    repeated Thread threads = 1;
+}
+
+message ForumIdRequest {
+    uint64 id = 1;
+}
+message ForumIdResponse {
+    uint64 id = 1;
+}
+
+message ForumSearchRequest { 
+    string key = 1; 
+}
+
+message ForumSearchResponse { 
+    repeated Forum forums = 1; 
+}
+
+service ForumService {
+    rpc CreateForum(Forum) returns (ForumIdResponse);
+    rpc CreateThread(Thread) returns (ForumIdResponse);
+    rpc CreatePost(Post) returns (ForumIdResponse);
+    rpc GetForum(ForumIdRequest) returns (Forum);
+    rpc GetForums(GetForumsRequest) returns (stream Forum);
+    rpc GetThread(ForumIdRequest) returns (Thread);
+    rpc GetThreads(GetThreadsRequest) returns (stream Thread);
+    rpc GetPosts(ForumIdRequest) returns (stream Post);
+    rpc UpdateForum(Forum) returns (Forum);
+    rpc UpdateThread(Thread) returns (Thread);
+    rpc UpdatePost(Post) returns (Post);
+    rpc DeleteForum(ForumIdRequest) returns (ForumIdResponse);
+    rpc DeleteThread(ForumIdRequest) returns (ForumIdResponse);
+    rpc DeletePost(ForumIdRequest) returns (ForumIdResponse);
+}
