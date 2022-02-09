@@ -10,7 +10,6 @@ import (
 	"github.com/rs401/letsgorip/pb"
 	"github.com/rs401/letsgorip/validation"
 	"golang.org/x/crypto/bcrypt"
-	"gorm.io/gorm"
 )
 
 type authService struct {
@@ -28,41 +27,52 @@ func (as *authService) SignUp(ctx context.Context, req *pb.User) (*pb.User, erro
 		return nil, err
 	}
 	exists, err := as.usersRepository.GetByEmail(req.Email)
-	if err == gorm.ErrRecordNotFound {
+	if exists.Name != "" {
+		return nil, validation.ErrEmailExists
+	}
+
+	if exists.Name == "" {
 		user := new(models.User)
-		req.Email = validation.NormalizeEmail(req.Email)
+		user.Name = strings.TrimSpace(req.Name)
+		user.Email = validation.NormalizeEmail(req.Email)
 		hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
 		if err != nil {
 			return nil, err
 		}
-		req.Password = string(hash)
-		user.FromProtoBuffer(req)
+		user.Password = hash
+		user.Role = 0
 
 		err = as.usersRepository.Save(user)
 		if err != nil {
+			if strings.Contains(err.Error(), "duplicate") {
+				if strings.Contains(err.Error(), "name") {
+					return nil, validation.ErrNameExists
+				}
+				if strings.Contains(err.Error(), "email") {
+					return nil, validation.ErrEmailExists
+				}
+			}
 			return nil, err
 		}
 		return user.ToProtoBuffer(), nil
 	}
 
-	if err == gorm.ErrInvalidField {
-		if strings.Contains(err.Error(), "name") {
-			return nil, validation.ErrNameExists
-		}
-		if strings.Contains(err.Error(), "email") {
-			return nil, validation.ErrEmailExists
-		}
-	}
-	if exists == nil {
-		return nil, err
-	}
 	return nil, err
 
 }
 
-// func (as *authService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.SignInResponse, error) {
+func (as *authService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.User, error) {
+	user, err := as.usersRepository.GetByEmail(req.Email)
+	if err != nil {
+		return nil, err
+	}
+	err = bcrypt.CompareHashAndPassword(user.Password, []byte(req.Password))
+	if err != nil {
+		return nil, err
+	}
 
-// }
+	return user.ToProtoBuffer(), nil
+}
 
 func (as *authService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.User, error) {
 	user, err := as.usersRepository.GetById(uint(req.Id))

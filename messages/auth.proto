@@ -38,11 +38,6 @@ message SignInRequest {
     string password = 2;
 }
 
-message SignInResponse {
-    User user = 1;
-    string token = 2;
-}
-
 message AddUserToRoleRequest {
     uint64 user_id = 1;
     UserRole role = 2;
@@ -50,7 +45,7 @@ message AddUserToRoleRequest {
 
 service AuthService {
     rpc SignUp(User) returns (User);
-    rpc SignIn(SignInRequest) returns (SignInResponse);
+    rpc SignIn(SignInRequest) returns (User);
     rpc GetUser(GetUserRequest) returns (User);
     rpc GetUserRole(GetUserRequest) returns (GetUserRoleResponse);
     rpc AddUserToRole(AddUserToRoleRequest) returns (User);

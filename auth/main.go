@@ -8,7 +8,6 @@ import (
 	"strconv"
 
 	"github.com/joho/godotenv"
-	"github.com/rs401/letsgorip/auth/models"
 	"github.com/rs401/letsgorip/auth/repository"
 	"github.com/rs401/letsgorip/auth/service"
 	"github.com/rs401/letsgorip/db"
@@ -29,7 +28,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error connecting to database: %v", err)
 	}
-	conn.DB().AutoMigrate(&models.User{})
+
 	usersRepository := repository.NewUsersRepository(conn)
 	authService := service.NewAuthService(usersRepository)
 	// users, err := usersRepository.GetAll()

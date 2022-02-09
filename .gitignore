@@ -3,4 +3,7 @@ bin
 .env.dev
 *.BAK
 authsvc
+authapi
+!authapi/
 notes.md
+*secrets.yaml
