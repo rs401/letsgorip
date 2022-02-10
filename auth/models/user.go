@@ -8,7 +8,7 @@ import (
 
 // User model for user
 type User struct {
-	ID        uint      `json:"id" gorm:"primaryKey"`
+	ID        uint64    `json:"id" gorm:"primaryKey"`
 	Name      string    `json:"name" gorm:"<-;unique;not null"`
 	Email     string    `json:"email" gorm:"<-;unique;not null"`
 	Password  []byte    `json:"-"`
@@ -30,7 +30,7 @@ func (u *User) ToProtoBuffer() *pb.User {
 }
 
 func (u *User) FromProtoBuffer(user *pb.User) {
-	u.ID = uint(user.GetId())
+	u.ID = user.GetId()
 	u.Name = user.GetName()
 	u.Email = user.GetEmail()
 	u.Password = []byte(user.GetPassword())

@@ -8,9 +8,10 @@ message Place {
     uint64 id = 1;
     uint64 user_id = 2;
     uint64 state_id = 3;
-    double name = 4;
-    double latitude = 5;
-    double longitude = 6;
+    string name = 4;
+    string description = 5;
+    double latitude = 6;
+    double longitude = 7;
 }
 
 message PlaceIdRequest {
@@ -27,7 +28,7 @@ message GetPlacesRequest {
 
 service PlaceService {
     rpc CreatePlace(Place) returns (PlaceIdResponse);
-    rpc GetPlace(PlaceIdRequest) returns (PlaceIdResponse);
+    rpc GetPlace(PlaceIdRequest) returns (Place);
     rpc GetPlaces(GetPlacesRequest) returns (stream Place);
     rpc UpdatePlace(Place) returns (PlaceIdResponse);
     rpc DeletePlace(PlaceIdRequest) returns (PlaceIdResponse);

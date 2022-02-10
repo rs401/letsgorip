@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PlaceServiceClient interface {
 	CreatePlace(ctx context.Context, in *Place, opts ...grpc.CallOption) (*PlaceIdResponse, error)
-	GetPlace(ctx context.Context, in *PlaceIdRequest, opts ...grpc.CallOption) (*PlaceIdResponse, error)
+	GetPlace(ctx context.Context, in *PlaceIdRequest, opts ...grpc.CallOption) (*Place, error)
 	GetPlaces(ctx context.Context, in *GetPlacesRequest, opts ...grpc.CallOption) (PlaceService_GetPlacesClient, error)
 	UpdatePlace(ctx context.Context, in *Place, opts ...grpc.CallOption) (*PlaceIdResponse, error)
 	DeletePlace(ctx context.Context, in *PlaceIdRequest, opts ...grpc.CallOption) (*PlaceIdResponse, error)
@@ -46,8 +46,8 @@ func (c *placeServiceClient) CreatePlace(ctx context.Context, in *Place, opts ..
 	return out, nil
 }
 
-func (c *placeServiceClient) GetPlace(ctx context.Context, in *PlaceIdRequest, opts ...grpc.CallOption) (*PlaceIdResponse, error) {
-	out := new(PlaceIdResponse)
+func (c *placeServiceClient) GetPlace(ctx context.Context, in *PlaceIdRequest, opts ...grpc.CallOption) (*Place, error) {
+	out := new(Place)
 	err := c.cc.Invoke(ctx, "/pb.PlaceService/GetPlace", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -110,7 +110,7 @@ func (c *placeServiceClient) DeletePlace(ctx context.Context, in *PlaceIdRequest
 // for forward compatibility
 type PlaceServiceServer interface {
 	CreatePlace(context.Context, *Place) (*PlaceIdResponse, error)
-	GetPlace(context.Context, *PlaceIdRequest) (*PlaceIdResponse, error)
+	GetPlace(context.Context, *PlaceIdRequest) (*Place, error)
 	GetPlaces(*GetPlacesRequest, PlaceService_GetPlacesServer) error
 	UpdatePlace(context.Context, *Place) (*PlaceIdResponse, error)
 	DeletePlace(context.Context, *PlaceIdRequest) (*PlaceIdResponse, error)
@@ -124,7 +124,7 @@ type UnimplementedPlaceServiceServer struct {
 func (UnimplementedPlaceServiceServer) CreatePlace(context.Context, *Place) (*PlaceIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePlace not implemented")
 }
-func (UnimplementedPlaceServiceServer) GetPlace(context.Context, *PlaceIdRequest) (*PlaceIdResponse, error) {
+func (UnimplementedPlaceServiceServer) GetPlace(context.Context, *PlaceIdRequest) (*Place, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPlace not implemented")
 }
 func (UnimplementedPlaceServiceServer) GetPlaces(*GetPlacesRequest, PlaceService_GetPlacesServer) error {

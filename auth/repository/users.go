@@ -13,11 +13,11 @@ var ErrorBadID error = errors.New("bad id")
 
 type UsersRepository interface {
 	Save(user *models.User) error
-	GetById(id uint) (user *models.User, err error)
+	GetById(id uint64) (user *models.User, err error)
 	GetByEmail(email string) (user *models.User, err error)
 	GetAll() (users []*models.User, err error)
 	Update(user *models.User) error
-	Delete(id uint) error
+	Delete(id uint64) error
 }
 
 type usersRepository struct {
@@ -32,7 +32,7 @@ func (r *usersRepository) Save(user *models.User) error {
 	return r.db.Create(&user).Error
 }
 
-func (r *usersRepository) GetById(id uint) (user *models.User, err error) {
+func (r *usersRepository) GetById(id uint64) (user *models.User, err error) {
 	result := r.db.Where("id = ?", id).First(&user)
 	return user, result.Error
 }
@@ -59,7 +59,7 @@ func (r *usersRepository) Update(user *models.User) error {
 	return r.db.Save(&tmpUser).Error
 }
 
-func (r *usersRepository) Delete(id uint) error {
+func (r *usersRepository) Delete(id uint64) error {
 	var user models.User
 	r.db.Find(&user, id)
 	if user.ID == 0 {

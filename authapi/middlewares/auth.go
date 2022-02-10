@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/rs401/letsgorip/api/tokenutils"
+	"github.com/rs401/letsgorip/authapi/tokenutils"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
@@ -13,7 +13,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		func(w http.ResponseWriter, r *http.Request) {
 			at, err := tokenutils.VerifyToken(r)
 			if err != nil {
-				log.Println("Bad token")
+				log.Printf("Bad token: %v", err)
 				w.WriteHeader(http.StatusUnauthorized)
 				json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 				return

@@ -148,7 +148,7 @@ func TestSaveAndGetById(t *testing.T) {
 	testGetId := struct {
 		name    string
 		db      *gorm.DB
-		id      uint
+		id      uint64
 		wantErr bool
 	}{
 		name:    "Get User By ID",
@@ -296,7 +296,7 @@ func TestDelete(t *testing.T) {
 	var user models.User
 	tx := conn.DB().Find(&user)
 	assert.NoError(t, tx.Error)
-	var id uint = user.ID
+	var id uint64 = user.ID
 	r := &usersRepository{
 		db: conn.DB(),
 	}

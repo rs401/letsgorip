@@ -38,14 +38,15 @@ func NewAuthHandlers(authSvcClient pb.AuthServiceClient) AuthHandlers {
 // SignUp handles calling the Client.SignUp method
 func (ah *authHandlers) SignUp(w http.ResponseWriter, r *http.Request) {
 	var user models.User
-	err := json.NewDecoder(r.Body).Decode(&user)
+	var pbUser pb.User
+	err := json.NewDecoder(r.Body).Decode(&pbUser)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "json formating decode error"})
 		return
 	}
 
-	result, err := ah.authSvcClient.SignUp(r.Context(), user.ToProtoBuffer())
+	result, err := ah.authSvcClient.SignUp(r.Context(), &pbUser)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
@@ -69,8 +70,9 @@ func (ah *authHandlers) SignUp(w http.ResponseWriter, r *http.Request) {
 			})
 	}
 	// Let them know
+	user.FromProtoBuffer(&pbUser)
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(result)
+	json.NewEncoder(w).Encode(user)
 }
 
 // SignIn handles calling the Client.SignIn method
@@ -111,6 +113,7 @@ func (ah *authHandlers) SignIn(w http.ResponseWriter, r *http.Request) {
 			})
 	}
 	// Let them know
+	user.FromProtoBuffer(result)
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(user)
 }
@@ -145,7 +148,7 @@ func (ah *authHandlers) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "json formating decode error"})
 		return
 	}
-	if user.ID != uint(id) {
+	if user.ID != uint64(id) {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "bad request, id error"})
 		return

@@ -75,7 +75,7 @@ func (as *authService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.U
 }
 
 func (as *authService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.User, error) {
-	user, err := as.usersRepository.GetById(uint(req.Id))
+	user, err := as.usersRepository.GetById(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (as *authService) ListUsers(req *pb.ListUsersRequest, stream pb.AuthService
 
 func (as *authService) UpdateUser(ctx context.Context, req *pb.User) (*pb.User, error) {
 	// Verify user exists
-	user, err := as.usersRepository.GetById(uint(req.Id))
+	user, err := as.usersRepository.GetById(req.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +133,7 @@ func (as *authService) UpdateUser(ctx context.Context, req *pb.User) (*pb.User, 
 }
 
 func (as *authService) DeleteUser(ctx context.Context, req *pb.GetUserRequest) (*pb.DeleteUserResponse, error) {
-	err := as.usersRepository.Delete(uint(req.Id))
+	err := as.usersRepository.Delete(req.Id)
 	if err != nil {
 		return nil, err
 	}

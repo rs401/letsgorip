@@ -15,6 +15,7 @@ import (
 	"github.com/rs401/letsgorip/authapi/routes"
 	"github.com/rs401/letsgorip/pb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var (
@@ -40,7 +41,7 @@ func init() {
 }
 func main() {
 	// Client dial server
-	clientConn, err := grpc.Dial(fmt.Sprintf("%s:%d", authSvcHost, authSvcPort))
+	clientConn, err := grpc.Dial(fmt.Sprintf("%s:%d", authSvcHost, authSvcPort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal("dialing:", err)
 	}
@@ -52,7 +53,7 @@ func main() {
 	// Setup handlers
 	hndFuncs := handlers.NewAuthHandlers(authSvcClient)
 	// Setup router
-	router := mux.NewRouter()
+	router := mux.NewRouter().StrictSlash(true)
 	// Setup routes
 	routes.SetupRoutes(router, hndFuncs)
 	// Setup middlewares
