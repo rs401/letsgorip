@@ -3,8 +3,8 @@ bin
 .env.dev
 *.BAK
 authsvc
-**/api
+api
 !api/
-pb/
+pb
 notes.md
 *secrets.yaml
