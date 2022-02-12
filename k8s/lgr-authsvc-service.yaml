@@ -3,6 +3,7 @@ kind: Service
 metadata:
   name: lgr-authsvc
 spec:
+  # type: NodePort
   selector:
     app: lgr-authsvc
   ports:

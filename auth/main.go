@@ -18,9 +18,43 @@ import (
 func init() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatalf("Error loading environment variables: %v", err)
+		log.Printf("Error loading environment variables: %v", err)
 	}
 }
+
+// const (
+// 	serverCertFile   = "../cert/server-cert.pem"
+// 	serverKeyFile    = "../cert/server-key.pem"
+// 	clientCACertFile = "../cert/ca-cert.pem"
+// )
+
+// func loadTLSCredentials() (credentials.TransportCredentials, error) {
+// 	// Load certificate of the CA who signed client's certificate
+// 	pemClientCA, err := ioutil.ReadFile(clientCACertFile)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	certPool := x509.NewCertPool()
+// 	if !certPool.AppendCertsFromPEM(pemClientCA) {
+// 		return nil, fmt.Errorf("failed to add client CA's certificate")
+// 	}
+
+// 	// Load server's certificate and private key
+// 	serverCert, err := tls.LoadX509KeyPair(serverCertFile, serverKeyFile)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	// Create the credentials and return it
+// 	config := &tls.Config{
+// 		Certificates: []tls.Certificate{serverCert},
+// 		ClientAuth:   tls.RequireAndVerifyClientCert,
+// 		ClientCAs:    certPool,
+// 	}
+
+// 	return credentials.NewTLS(config), nil
+// }
 
 func main() {
 	cfg := db.NewConfig()
@@ -46,7 +80,14 @@ func main() {
 	if err != nil {
 		log.Fatalf("failed to listen: %v\n", err)
 	}
+
+	// tlsCredentials, err := loadTLSCredentials()
+	// if err != nil {
+	// 	log.Fatalf("cannot load TLS credentials: %v", err)
+	// }
+
 	var opts []grpc.ServerOption
+	// opts = append(opts, grpc.Creds(tlsCredentials))
 
 	grpcServer := grpc.NewServer(opts...)
 	pb.RegisterAuthServiceServer(grpcServer, authService)

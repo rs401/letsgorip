@@ -5,24 +5,32 @@ help: ## Show this help
 
 
 build-api: ## build the Auth API
-	@go build -o authapi/authapi authapi/main.go
+	@go build -o api/api api/main.go
 
 build-auth: ## build the Auth service
 	@go build -o auth/authsvc auth/main.go
 
-build-authapi-docker: ## build the Auth API docker image
-	@CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -a -installsuffix cgo -ldflags '-s' -o docker/authapi/authapi authapi/main.go
-	@docker build -t rs401/letsgoripauthapi:latest docker/authapi
+build-api-docker: ## build the Auth API docker image
+#	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags '-s' -o docker/api/api api/main.go
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/api/api api/main.go
+	@docker build -t rs401/letsgoripapi:latest docker/api
 
 build-auth-docker: ## build the Auth service docker image
-	@CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -a -installsuffix cgo -ldflags '-s' -o docker/auth/authsvc auth/main.go
+#	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags '-s' -o docker/auth/authsvc auth/main.go
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/auth/authsvc auth/main.go
 	@docker build -t rs401/letsgoripauthsvc:latest docker/auth
 
-test: ## Run all tests
-	@go test -v -cover ./...
+build-docker: build-api-docker build-auth-docker ## Build both docker images
+
 
 kube: ## Run kubectl apply on kubernetes config directory
 	@kubectl apply -f k8s/
 
+kube-down: ## Run kubectl delete on kubernetes config directory
+	@kubectl delete -f k8s/
+
 proto: ## Run protoc compiler
 	@protoc -I=./messages --go_out=./pb --go_opt=paths=source_relative --go-grpc_out=./pb --go-grpc_opt=paths=source_relative ./messages/*.proto
+
+test: ## Run all tests
+	@go test -v -cover ./...
