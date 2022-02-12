@@ -30,11 +30,9 @@ message Post {
     uint64 id = 1;
     uint64 thread_id = 2;
     uint64 user_id = 3;
-    string name = 4;
-    string msg = 5;
-    repeated Post posts = 6;
-    int64 created_at = 7;
-    int64 updated_at = 8;
+    string msg = 4;
+    int64 created_at = 5;
+    int64 updated_at = 6;
 }
 
 // message GetForumRequest {
@@ -72,12 +70,12 @@ message ForumIdResponse {
     uint64 id = 1;
 }
 
-message ForumSearchRequest { 
-    string key = 1; 
+message ForumSearchRequest {
+    string key = 1;
 }
 
-message ForumSearchResponse { 
-    repeated Forum forums = 1; 
+message ForumSearchResponse {
+    repeated Thread threads = 1;
 }
 
 service ForumService {
