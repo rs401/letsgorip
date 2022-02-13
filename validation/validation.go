@@ -66,6 +66,10 @@ func IsValidForum(forum *pb.Forum) error {
 	if IsEmptyString(forum.Description) {
 		return ErrEmptyDescription
 	}
+	if forum.UserId == 0 {
+		// it shouldn't get this far without the UserId
+		return fmt.Errorf("user id can't be null")
+	}
 
 	return nil
 }
