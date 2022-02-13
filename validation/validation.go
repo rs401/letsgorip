@@ -30,7 +30,7 @@ var (
 	// ErrNameExists error for name already exists
 	ErrNameExists = errors.New("name already exists")
 	// ErrNotFound error for not found
-	ErrNotFound = errors.New("user not found")
+	ErrNotFound = errors.New("resource not found")
 	// ErrInvalidPassword error for invalid password
 	ErrInvalidPassword = errors.New("invalid password, 8-50 characters, one upper, lower, number and special character")
 
@@ -69,6 +69,41 @@ func IsValidForum(forum *pb.Forum) error {
 	if forum.UserId == 0 {
 		// it shouldn't get this far without the UserId
 		return fmt.Errorf("user id can't be null")
+	}
+
+	return nil
+}
+
+func IsValidThread(thread *pb.Thread) error {
+	if IsEmptyString(thread.Title) {
+		return ErrEmptyTitle
+	}
+	if IsEmptyString(thread.Msg) {
+		return ErrEmptyMsg
+	}
+	if thread.UserId == 0 {
+		// it shouldn't get this far without the UserId
+		return fmt.Errorf("user id can't be null")
+	}
+	if thread.ForumId == 0 {
+		// it shouldn't get this far without the ForumId
+		return fmt.Errorf("forum id can't be null")
+	}
+
+	return nil
+}
+
+func IsValidPost(post *pb.Post) error {
+	if IsEmptyString(post.Msg) {
+		return ErrEmptyMsg
+	}
+	if post.UserId == 0 {
+		// it shouldn't get this far without the UserId
+		return fmt.Errorf("user id can't be null")
+	}
+	if post.ThreadId == 0 {
+		// it shouldn't get this far without the ForumId
+		return fmt.Errorf("thread id can't be null")
 	}
 
 	return nil

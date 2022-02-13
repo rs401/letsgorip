@@ -9,6 +9,11 @@ func (fr *forumsRepository) CreatePost(post *models.Post) error {
 	return fr.db.Create(&post).Error
 }
 
+func (fr *forumsRepository) GetPost(id uint64) (post *models.Post, err error) {
+	result := fr.db.Where("id = ?", id).First(&post)
+	return post, result.Error
+}
+
 func (fr *forumsRepository) GetPosts(id uint64) (posts []*models.Post, err error) {
 	result := fr.db.Find(&posts)
 	return posts, result.Error

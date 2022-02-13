@@ -3,7 +3,8 @@ package db
 import (
 	"log"
 
-	"github.com/rs401/letsgorip/auth/models"
+	authModels "github.com/rs401/letsgorip/auth/models"
+	forumsModels "github.com/rs401/letsgorip/forums/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -26,6 +27,11 @@ func NewConnection(cfg Config) (Connection, error) {
 		log.Printf("Error, could not connect to database: %v", err)
 		return nil, err
 	}
-	dbc.AutoMigrate(&models.User{})
+	dbc.AutoMigrate(
+		&authModels.User{},
+		&forumsModels.Forum{},
+		&forumsModels.Thread{},
+		&forumsModels.Post{},
+	)
 	return &conn{db: dbc}, nil
 }

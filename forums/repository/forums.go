@@ -16,9 +16,11 @@ type ForumsRepository interface {
 	CreateThread(thread *models.Thread) error
 	CreatePost(post *models.Post) error
 	GetForum(id uint64) (*models.Forum, error)
+	GetForumByTitle(title string) (*models.Forum, error)
 	GetForums() ([]*models.Forum, error)
 	GetThread(id uint64) (*models.Thread, error)
 	GetThreads() ([]*models.Thread, error)
+	GetPost(id uint64) (*models.Post, error)
 	GetPosts(id uint64) ([]*models.Post, error)
 	UpdateForum(forum *models.Forum) error
 	UpdateThread(thread *models.Thread) error
@@ -42,6 +44,11 @@ func (fr *forumsRepository) CreateForum(forum *models.Forum) error {
 
 func (fr *forumsRepository) GetForum(id uint64) (forum *models.Forum, err error) {
 	result := fr.db.Where("id = ?", id).First(&forum)
+	return forum, result.Error
+}
+
+func (fr *forumsRepository) GetForumByTitle(title string) (forum *models.Forum, err error) {
+	result := fr.db.Where("title = ?", title).First(&forum)
 	return forum, result.Error
 }
 
