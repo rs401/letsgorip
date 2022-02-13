@@ -10,14 +10,15 @@ build-api: ## build the Auth API
 build-auth: ## build the Auth service
 	@go build -o auth/authsvc auth/main.go
 
+build-forums: ## build the Forum service
+	@go build -o forums/forumsvc forums/main.go
+
 build-api-docker: ## build the Auth API docker image
-#	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags '-s' -o docker/api/api api/main.go
 	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/api/api api/main.go
 	@docker build -t rs401/letsgoripapi:latest docker/api
 	@rm docker/api/api
 
 build-auth-docker: ## build the Auth service docker image
-#	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -ldflags '-s' -o docker/auth/authsvc auth/main.go
 	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/auth/authsvc auth/main.go
 	@docker build -t rs401/letsgoripauthsvc:latest docker/auth
 	@rm docker/auth/authsvc

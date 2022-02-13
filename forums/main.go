@@ -45,5 +45,7 @@ func main() {
 	grpcServer := grpc.NewServer(opts...)
 	pb.RegisterForumServiceServer(grpcServer, forumService)
 	log.Printf("Forum service running on port: :%d\n", port)
-	grpcServer.Serve(lis)
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatalf("Error Serving: %v\n", err)
+	}
 }

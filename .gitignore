@@ -4,6 +4,7 @@ bin
 *.BAK
 authsvc
 api
+forumsvc
 !api/
 pb
 notes.md
