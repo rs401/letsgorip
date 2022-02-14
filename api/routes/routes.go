@@ -33,6 +33,7 @@ func SetupRoutes(r *mux.Router, authHandleFuncs handlers.AuthHandlers) {
 
 	// Post routes
 	// GET 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/"
+	// GET 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/"
 
 	// Protected routes
 	authRouter := r.PathPrefix("").Subrouter()
@@ -48,7 +49,7 @@ func SetupRoutes(r *mux.Router, authHandleFuncs handlers.AuthHandlers) {
 	// PUT 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/"
 	// DELETE 	"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/"
 	// Protected Post routes
-	// POST 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/"
+	// POST 	"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/"
 	// PUT 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/"
-	// DELETE 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/"
+	// DELETE 	"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/"
 }

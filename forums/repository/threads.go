@@ -14,8 +14,8 @@ func (fr *forumsRepository) GetThread(id uint64) (thread *models.Thread, err err
 	return thread, result.Error
 }
 
-func (fr *forumsRepository) GetThreads() (threads []*models.Thread, err error) {
-	result := fr.db.Find(&threads)
+func (fr *forumsRepository) GetThreads(id uint64) (threads []*models.Thread, err error) {
+	result := fr.db.Where("forum_id = ?", id).Find(&threads)
 	return threads, result.Error
 }
 

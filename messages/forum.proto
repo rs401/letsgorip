@@ -85,7 +85,8 @@ service ForumService {
     rpc GetForum(ForumIdRequest) returns (Forum);
     rpc GetForums(GetForumsRequest) returns (stream Forum);
     rpc GetThread(ForumIdRequest) returns (Thread);
-    rpc GetThreads(GetThreadsRequest) returns (stream Thread);
+    rpc GetThreads(ForumIdRequest) returns (stream Thread);
+    rpc GetPost(ForumIdRequest) returns (Post);
     rpc GetPosts(ForumIdRequest) returns (stream Post);
     rpc UpdateForum(Forum) returns (Forum);
     rpc UpdateThread(Thread) returns (Thread);

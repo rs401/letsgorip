@@ -107,8 +107,8 @@ func (fs *forumService) GetThread(ctx context.Context, req *pb.ForumIdRequest) (
 	return thread.ToProtoBuffer(), nil
 }
 
-func (fs *forumService) GetThreads(req *pb.GetThreadsRequest, stream pb.ForumService_GetThreadsServer) error {
-	threads, err := fs.forumsRepository.GetThreads()
+func (fs *forumService) GetThreads(req *pb.ForumIdRequest, stream pb.ForumService_GetThreadsServer) error {
+	threads, err := fs.forumsRepository.GetThreads(req.GetId())
 	if err != nil {
 		return err
 	}
@@ -119,6 +119,14 @@ func (fs *forumService) GetThreads(req *pb.GetThreadsRequest, stream pb.ForumSer
 		}
 	}
 	return nil
+}
+
+func (fs *forumService) GetPost(ctx context.Context, req *pb.ForumIdRequest) (*pb.Post, error) {
+	post, err := fs.forumsRepository.GetPost(req.GetId())
+	if err != nil {
+		return nil, err
+	}
+	return post.ToProtoBuffer(), nil
 }
 
 func (fs *forumService) GetPosts(req *pb.ForumIdRequest, stream pb.ForumService_GetPostsServer) error {

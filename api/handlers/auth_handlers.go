@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
-	"github.com/rs401/letsgorip/auth/models"
 	"github.com/rs401/letsgorip/api/tokenutils"
+	"github.com/rs401/letsgorip/auth/models"
 	"github.com/rs401/letsgorip/pb"
 )
 
@@ -232,7 +232,6 @@ func (ah *authHandlers) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 // DeleteUser handles calling the Client.DeleteUser method
 func (ah *authHandlers) DeleteUser(w http.ResponseWriter, r *http.Request) {
-	// TODO: Verify authenticated user is the user being deleted
 	userId := tokenutils.ExtractUserId(r)
 	if userId == 0 {
 		log.Printf("UserId could not be extracted from token")

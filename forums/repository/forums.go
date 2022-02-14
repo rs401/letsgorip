@@ -19,7 +19,7 @@ type ForumsRepository interface {
 	GetForumByTitle(title string) (*models.Forum, error)
 	GetForums() ([]*models.Forum, error)
 	GetThread(id uint64) (*models.Thread, error)
-	GetThreads() ([]*models.Thread, error)
+	GetThreads(id uint64) ([]*models.Thread, error)
 	GetPost(id uint64) (*models.Post, error)
 	GetPosts(id uint64) ([]*models.Post, error)
 	UpdateForum(forum *models.Forum) error
