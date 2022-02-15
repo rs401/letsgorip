@@ -2,12 +2,14 @@ package service
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/rs401/letsgorip/forums/models"
 	"github.com/rs401/letsgorip/forums/repository"
 	"github.com/rs401/letsgorip/pb"
 	"github.com/rs401/letsgorip/validation"
+	"gorm.io/gorm"
 )
 
 type forumService struct {
@@ -27,11 +29,15 @@ func (fs *forumService) CreateForum(ctx context.Context, req *pb.Forum) (*pb.For
 	// Check if forum title exists
 	exists, err := fs.forumsRepository.GetForumByTitle(req.Title)
 	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			goto LabelContinue
+		}
 		return nil, err
 	}
 	if exists.Id != 0 {
 		return nil, fmt.Errorf("error forum title exists")
 	}
+LabelContinue:
 
 	// Create forum
 	forum := new(models.Forum)

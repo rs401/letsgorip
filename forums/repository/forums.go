@@ -63,7 +63,7 @@ func (fr *forumsRepository) UpdateForum(forum *models.Forum) error {
 	if tmpForum.Title != forum.Title && !validation.IsEmptyString(forum.Title) {
 		tmpForum.Title = forum.Title
 	}
-	if tmpForum.Description != forum.Description && validation.IsValidEmail(forum.Description) {
+	if tmpForum.Description != forum.Description && !validation.IsEmptyString(forum.Description) {
 		tmpForum.Description = forum.Description
 	}
 	return fr.db.Save(&tmpForum).Error

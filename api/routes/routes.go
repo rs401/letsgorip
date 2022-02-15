@@ -10,8 +10,8 @@ import (
 	"github.com/rs401/letsgorip/api/middlewares"
 )
 
-// SetupRoutes takes a *mux.Router and a AuthHandlers to configure *mux.Routes
-func SetupRoutes(r *mux.Router, authHandleFuncs handlers.AuthHandlers) {
+// SetupRoutes takes a *mux.Router and various handlers to configure *mux.Routes
+func SetupRoutes(r *mux.Router, authHandleFuncs handlers.AuthHandlers, forumHandleFuncs handlers.ForumHandlers) {
 	r.HandleFunc("/api/", func(rw http.ResponseWriter, r *http.Request) {
 		rw.WriteHeader(http.StatusOK)
 		json.NewEncoder(rw).Encode(map[string]string{"heartbeat": "alive"})
@@ -24,32 +24,31 @@ func SetupRoutes(r *mux.Router, authHandleFuncs handlers.AuthHandlers) {
 	r.HandleFunc("/api/user/{id:[0-9]+}/", authHandleFuncs.GetUser).Methods("GET")
 
 	// Forum routes
-	// GET 		"/api/forum/"
-	// GET 		"/api/forum/{fid:[0-9]+}/"
-
+	r.HandleFunc("/api/forum/", forumHandleFuncs.GetForums).Methods("GET")
+	r.HandleFunc("/api/forum/{fid:[0-9]+}/", forumHandleFuncs.GetForum).Methods("GET")
 	// Thread routes
-	// GET 		"/api/forum/{fid:[0-9]+}/thread/"
-	// GET 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/"
-
+	r.HandleFunc("/api/forum/{fid:[0-9]+}/thread/", forumHandleFuncs.GetThreads).Methods("GET")
+	r.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/", forumHandleFuncs.GetThread).Methods("GET")
 	// Post routes
-	// GET 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/"
-	// GET 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/"
+	r.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/", forumHandleFuncs.GetPosts).Methods("GET")
+	r.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/", forumHandleFuncs.GetPost).Methods("GET")
 
 	// Protected routes
 	authRouter := r.PathPrefix("").Subrouter()
 	authRouter.Use(middlewares.AuthMiddleware)
 	authRouter.HandleFunc("/api/user/{id:[0-9]+}/", authHandleFuncs.UpdateUser).Methods("PUT")
 	authRouter.HandleFunc("/api/user/{id:[0-9]+}/", authHandleFuncs.DeleteUser).Methods("DELETE")
+
 	// Protected Forum routes
-	// POST 	"/api/forum/"
-	// PUT 		"/api/forum/{fid:[0-9]+}/"
-	// DELETE 	"/api/forum/{fid:[0-9]+}/"
+	authRouter.HandleFunc("/api/forum/", forumHandleFuncs.CreateForum).Methods("POST")
+	authRouter.HandleFunc("/api/forum/{fid:[0-9]+}/", forumHandleFuncs.UpdateForum).Methods("PUT")
+	authRouter.HandleFunc("/api/forum/{fid:[0-9]+}/", forumHandleFuncs.DeleteForum).Methods("DELETE")
 	// Protected Thread routes
-	// POST 	"/api/forum/{fid:[0-9]+}/thread/"
-	// PUT 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/"
-	// DELETE 	"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/"
+	authRouter.HandleFunc("/api/forum/{fid:[0-9]+}/thread/", forumHandleFuncs.CreateThread).Methods("POST")
+	authRouter.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/", forumHandleFuncs.UpdateThread).Methods("PUT")
+	authRouter.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/", forumHandleFuncs.DeleteThread).Methods("DELETE")
 	// Protected Post routes
-	// POST 	"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/"
-	// PUT 		"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/"
-	// DELETE 	"/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/"
+	authRouter.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/", forumHandleFuncs.CreatePost).Methods("POST")
+	authRouter.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/", forumHandleFuncs.UpdatePost).Methods("PUT")
+	authRouter.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/", forumHandleFuncs.DeletePost).Methods("DELETE")
 }

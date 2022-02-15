@@ -44,69 +44,63 @@ func NewForumHandlers(forumSvcClient pb.ForumServiceClient) ForumHandlers {
 
 func (fh *forumHandlers) CreateForum(w http.ResponseWriter, r *http.Request) {
 	var forum models.Forum
-	var pbForum pb.Forum
 	// Decode body
-	err := json.NewDecoder(r.Body).Decode(&pbForum)
+	err := json.NewDecoder(r.Body).Decode(&forum)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "json formating decode error"})
 		return
 	}
 	// Create
-	response, err := fh.forumSvcClient.CreateForum(r.Context(), &pbForum)
+	response, err := fh.forumSvcClient.CreateForum(r.Context(), forum.ToProtoBuffer())
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 		return
 	}
-	pbForum.Id = response.Id
-	forum.FromProtoBuffer(&pbForum)
+	forum.Id = response.GetId()
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(forum)
 }
 
 func (fh *forumHandlers) CreateThread(w http.ResponseWriter, r *http.Request) {
 	var thread models.Thread
-	var pbThread pb.Thread
 	// Decode body
-	err := json.NewDecoder(r.Body).Decode(&pbThread)
+	err := json.NewDecoder(r.Body).Decode(&thread)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "json formating decode error"})
 		return
 	}
 	// Create
-	response, err := fh.forumSvcClient.CreateThread(r.Context(), &pbThread)
+	response, err := fh.forumSvcClient.CreateThread(r.Context(), thread.ToProtoBuffer())
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 		return
 	}
-	pbThread.Id = response.Id
-	thread.FromProtoBuffer(&pbThread)
+	thread.Id = response.Id
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(thread)
 }
 
 func (fh *forumHandlers) CreatePost(w http.ResponseWriter, r *http.Request) {
 	var post models.Post
-	var pbPost pb.Post
 	// Decode body
-	err := json.NewDecoder(r.Body).Decode(&pbPost)
+	err := json.NewDecoder(r.Body).Decode(&post)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "json formating decode error"})
 		return
 	}
 	// Create
-	response, err := fh.forumSvcClient.CreatePost(r.Context(), &pbPost)
+	response, err := fh.forumSvcClient.CreatePost(r.Context(), post.ToProtoBuffer())
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
 		return
 	}
-	pbPost.Id = response.Id
-	post.FromProtoBuffer(&pbPost)
+	post.Id = response.Id
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(post)
 }
@@ -337,7 +331,7 @@ func (fh *forumHandlers) UpdateForum(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "bad path"})
 		return
 	}
-	var forum pb.Forum
+	var forum models.Forum
 	err = json.NewDecoder(r.Body).Decode(&forum)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -357,7 +351,7 @@ func (fh *forumHandlers) UpdateForum(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := fh.forumSvcClient.UpdateForum(r.Context(), &forum)
+	result, err := fh.forumSvcClient.UpdateForum(r.Context(), forum.ToProtoBuffer())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
@@ -390,7 +384,7 @@ func (fh *forumHandlers) UpdateThread(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "bad path"})
 		return
 	}
-	var thread pb.Thread
+	var thread models.Thread
 	err = json.NewDecoder(r.Body).Decode(&thread)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -416,7 +410,7 @@ func (fh *forumHandlers) UpdateThread(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := fh.forumSvcClient.UpdateThread(r.Context(), &thread)
+	result, err := fh.forumSvcClient.UpdateThread(r.Context(), thread.ToProtoBuffer())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
@@ -449,7 +443,7 @@ func (fh *forumHandlers) UpdatePost(w http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(w).Encode(map[string]string{"error": "bad path"})
 		return
 	}
-	var post pb.Post
+	var post models.Post
 	err = json.NewDecoder(r.Body).Decode(&post)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -475,7 +469,7 @@ func (fh *forumHandlers) UpdatePost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	result, err := fh.forumSvcClient.UpdatePost(r.Context(), &post)
+	result, err := fh.forumSvcClient.UpdatePost(r.Context(), post.ToProtoBuffer())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
