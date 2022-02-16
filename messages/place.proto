@@ -7,11 +7,12 @@ option go_package = "github.com/rs401/letsgorip/pb";
 message Place {
     uint64 id = 1;
     uint64 user_id = 2;
-    uint64 state_id = 3;
-    string name = 4;
-    string description = 5;
-    double latitude = 6;
-    double longitude = 7;
+    string name = 3;
+    string description = 4;
+    double latitude = 5;
+    double longitude = 6;
+    int64 created_at = 7;
+    int64 updated_at = 8;
 }
 
 message PlaceIdRequest {
@@ -22,14 +23,12 @@ message PlaceIdResponse {
     uint64 id = 1;
 }
 
-message GetPlacesRequest {
-    uint64 state_id = 1;
-}
+message GetPlacesRequest {}
 
 service PlaceService {
     rpc CreatePlace(Place) returns (PlaceIdResponse);
     rpc GetPlace(PlaceIdRequest) returns (Place);
     rpc GetPlaces(GetPlacesRequest) returns (stream Place);
-    rpc UpdatePlace(Place) returns (PlaceIdResponse);
+    rpc UpdatePlace(Place) returns (Place);
     rpc DeletePlace(PlaceIdRequest) returns (PlaceIdResponse);
 }

@@ -102,8 +102,29 @@ func IsValidPost(post *pb.Post) error {
 		return fmt.Errorf("user id can't be null")
 	}
 	if post.ThreadId == 0 {
-		// it shouldn't get this far without the ForumId
+		// it shouldn't get this far without the ThreadId
 		return fmt.Errorf("thread id can't be null")
+	}
+
+	return nil
+}
+
+func IsValidPlace(place *pb.Place) error {
+	// Name not empty
+	if IsEmptyString(place.Name) {
+		return ErrEmptyName
+	}
+	// Description not empty
+	if IsEmptyString(place.Description) {
+		return ErrEmptyDescription
+	}
+	if place.UserId == 0 {
+		// it shouldn't get this far without the UserId
+		return fmt.Errorf("user id can't be null")
+	}
+	// Lat & Long shouldn't be zero
+	if place.Latitude == 0 || place.Longitude == 0 {
+		return fmt.Errorf("coordinates cannot be zero")
 	}
 
 	return nil

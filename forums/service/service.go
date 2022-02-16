@@ -41,9 +41,9 @@ LabelContinue:
 
 	// Create forum
 	forum := new(models.Forum)
-	forum.UserId = req.UserId
-	forum.Title = req.Title
-	forum.Description = req.Description
+	forum.UserId = req.GetUserId()
+	forum.Title = req.GetTitle()
+	forum.Description = req.GetDescription()
 	if err := fs.forumsRepository.CreateForum(forum); err != nil {
 		return nil, err
 	}
@@ -57,10 +57,10 @@ func (fs *forumService) CreateThread(ctx context.Context, req *pb.Thread) (*pb.F
 	}
 	// Create thread
 	thread := new(models.Thread)
-	thread.ForumId = req.ForumId
-	thread.UserId = req.UserId
-	thread.Title = req.Title
-	thread.Msg = req.Msg
+	thread.ForumId = req.GetForumId()
+	thread.UserId = req.GetUserId()
+	thread.Title = req.GetTitle()
+	thread.Msg = req.GetMsg()
 	if err := fs.forumsRepository.CreateThread(thread); err != nil {
 		return nil, err
 	}
@@ -74,9 +74,9 @@ func (fs *forumService) CreatePost(ctx context.Context, req *pb.Post) (*pb.Forum
 	}
 	// Create post
 	post := new(models.Post)
-	post.ThreadId = req.ThreadId
-	post.UserId = req.UserId
-	post.Msg = req.Msg
+	post.ThreadId = req.GetThreadId()
+	post.UserId = req.GetUserId()
+	post.Msg = req.GetMsg()
 	if err := fs.forumsRepository.CreatePost(post); err != nil {
 		return nil, err
 	}
