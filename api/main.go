@@ -21,8 +21,10 @@ import (
 var (
 	authSvcHost  string
 	forumSvcHost string
+	placeSvcHost string
 	authSvcPort  int
 	forumSvcPort int
+	placeSvcPort int
 	apiPort      int
 )
 
@@ -40,6 +42,11 @@ func init() {
 	forumSvcPort, err = strconv.Atoi(os.Getenv("FORUMSVC_PORT"))
 	if err != nil {
 		log.Fatalf("Error converting FORUMSVC_PORT to int")
+	}
+	placeSvcHost = os.Getenv("PLACESVC_HOST")
+	placeSvcPort, err = strconv.Atoi(os.Getenv("PLACESVC_PORT"))
+	if err != nil {
+		log.Fatalf("Error converting PLACESVC_PORT to int")
 	}
 	apiPort, err = strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {
@@ -61,17 +68,24 @@ func main() {
 		log.Fatal("Error dialing forum service:", err)
 	}
 	defer forumClientConn.Close()
+	placeClientConn, err := grpc.Dial(fmt.Sprintf("%s:%d", placeSvcHost, placeSvcPort), opts...)
+	if err != nil {
+		log.Fatal("Error dialing place service:", err)
+	}
+	defer placeClientConn.Close()
 	// Initialize client
 	// Pass this to handlers
 	authSvcClient := pb.NewAuthServiceClient(authClientConn)
 	forumSvcClient := pb.NewForumServiceClient(forumClientConn)
+	placeSvcClient := pb.NewPlaceServiceClient(placeClientConn)
 	// Setup handlers
 	authHandleFuncs := handlers.NewAuthHandlers(authSvcClient)
 	forumHandleFuncs := handlers.NewForumHandlers(forumSvcClient)
+	placeHandleFuncs := handlers.NewPlaceHandlers(placeSvcClient)
 	// Setup router
 	router := mux.NewRouter().StrictSlash(true)
 	// Setup routes
-	routes.SetupRoutes(router, authHandleFuncs, forumHandleFuncs)
+	routes.SetupRoutes(router, authHandleFuncs, forumHandleFuncs, placeHandleFuncs)
 	// Setup middlewares
 	middlewares.SetupMiddleWares(router)
 	// Listen
