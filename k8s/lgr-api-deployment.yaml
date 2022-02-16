@@ -41,6 +41,16 @@ spec:
               configMapKeyRef:
                 name: lgr-api-config
                 key: authsvc_port
+          - name: FORUMSVC_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-api-config
+                key: forumsvc_host
+          - name: FORUMSVC_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-api-config
+                key: forumsvc_port
           - name: JWT_SECRET
             valueFrom:
               secretKeyRef:

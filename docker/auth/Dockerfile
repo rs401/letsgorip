@@ -1,6 +1,6 @@
 FROM scratch
 
-COPY ./.env ./
+# COPY ./.env ./
 COPY ./authsvc ./app/
 
 EXPOSE ${AUTHSVC_PORT}

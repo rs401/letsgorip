@@ -39,7 +39,7 @@ func init() {
 	forumSvcHost = os.Getenv("FORUMSVC_HOST")
 	forumSvcPort, err = strconv.Atoi(os.Getenv("FORUMSVC_PORT"))
 	if err != nil {
-		log.Fatalf("Error converting AUTHSVC_PORT to int")
+		log.Fatalf("Error converting FORUMSVC_PORT to int")
 	}
 	apiPort, err = strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {

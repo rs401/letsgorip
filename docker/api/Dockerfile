@@ -1,6 +1,6 @@
 FROM scratch
 
-COPY ./.env ./
+# COPY ./.env ./
 COPY ./api ./app/
 
 EXPOSE ${API_PORT}
