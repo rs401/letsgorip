@@ -36,3 +36,7 @@ func (fr *forumsRepository) DeletePost(id uint64) error {
 	}
 	return fr.db.Delete(&post).Error
 }
+
+func (fr *forumsRepository) DeleteAllPosts() error {
+	return fr.db.Exec("DELETE FROM posts").Error
+}

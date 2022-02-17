@@ -39,3 +39,7 @@ func (fr *forumsRepository) DeleteThread(id uint64) error {
 	}
 	return fr.db.Delete(&thread).Error
 }
+
+func (fr *forumsRepository) DeleteAllThreads() error {
+	return fr.db.Exec("DELETE FROM threads").Error
+}

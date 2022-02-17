@@ -77,3 +77,7 @@ func (fr *forumsRepository) DeleteForum(id uint64) error {
 	}
 	return fr.db.Delete(&forum).Error
 }
+
+func (fr *forumsRepository) DeleteAllForums() error {
+	return fr.db.Exec("DELETE FROM forums").Error
+}
