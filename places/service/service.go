@@ -35,9 +35,10 @@ func (ps *placeService) CreatePlace(ctx context.Context, req *pb.Place) (*pb.Pla
 		return nil, err
 	}
 	if exists.Id != 0 {
-		return nil, fmt.Errorf("error forum title exists")
+		return nil, fmt.Errorf("error place name exists")
 	}
 LabelContinue:
+
 	// Create Place
 	place := new(models.Place)
 	place.UserId = req.GetUserId()

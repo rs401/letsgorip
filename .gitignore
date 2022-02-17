@@ -5,6 +5,7 @@ bin
 authsvc
 api
 forumsvc
+placesvc
 !api/
 pb
 notes.md

@@ -153,7 +153,7 @@ func (ph *placeHandlers) UpdatePlace(w http.ResponseWriter, r *http.Request) {
 	result, err := ph.placeSvcClient.UpdatePlace(r.Context(), place.ToProtoBuffer())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+		json.NewEncoder(w).Encode(map[string]string{"error from service client": err.Error()})
 		return
 	}
 	var tmpPlace models.Place

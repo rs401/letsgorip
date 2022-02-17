@@ -58,6 +58,6 @@ func SetupRoutes(r *mux.Router, authHandleFuncs handlers.AuthHandlers, forumHand
 	authRouter.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/post/{pid:[0-9]+}/", forumHandleFuncs.DeletePost).Methods("DELETE")
 	// Protected Place routes
 	authRouter.HandleFunc("/api/place/", placeHandleFuncs.CreatePlace).Methods("POST")
-	authRouter.HandleFunc("/api/place/{id:[0-9]+}/", placeHandleFuncs.CreatePlace).Methods("POST")
+	authRouter.HandleFunc("/api/place/{id:[0-9]+}/", placeHandleFuncs.UpdatePlace).Methods("PUT")
 	authRouter.HandleFunc("/api/place/{id:[0-9]+}/", placeHandleFuncs.DeletePlace).Methods("DELETE")
 }

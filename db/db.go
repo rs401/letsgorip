@@ -5,6 +5,7 @@ import (
 
 	authModels "github.com/rs401/letsgorip/auth/models"
 	forumsModels "github.com/rs401/letsgorip/forums/models"
+	placesModels "github.com/rs401/letsgorip/places/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -32,6 +33,7 @@ func NewConnection(cfg Config) (Connection, error) {
 		&forumsModels.Forum{},
 		&forumsModels.Thread{},
 		&forumsModels.Post{},
+		&placesModels.Place{},
 	)
 	return &conn{db: dbc}, nil
 }
