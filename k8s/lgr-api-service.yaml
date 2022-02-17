@@ -7,6 +7,5 @@ spec:
   selector:
     app: lgr-api
   ports:
-  # Apparently you can't use secrets with services...
     - port: 9000
       targetPort: 9000

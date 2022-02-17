@@ -8,3 +8,5 @@ data:
   authsvc_port: "9001"
   forumsvc_host: "lgr-forumsvc"
   forumsvc_port: "9002"
+  placesvc_host: "lgr-placesvc"
+  placesvc_port: "9003"

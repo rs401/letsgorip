@@ -1,6 +1,6 @@
 FROM scratch
 
-COPY ./.env ./
+# COPY ./.env ./
 COPY ./placesvc ./app/
 
 EXPOSE ${PLACESVC_PORT}
