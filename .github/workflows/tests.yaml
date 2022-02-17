@@ -1,0 +1,35 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_PASSWORD: postgres
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.17
+    - name: Test
+      env:
+        JWT_SECRET: ${{ secrets.JWTSECRET }}
+        REFRESH_SECRET: ${{ secrets.REFRESHSECRET }}
+        DB_USER: postgres
+        DB_HOST: localhost
+        DB_NAME: postgres
+        DB_PORT: 5432
+      run: CI=true go test -v ./...

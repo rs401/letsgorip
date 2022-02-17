@@ -45,6 +45,10 @@ kube: ## Run kubectl apply on kubernetes config directory
 kube-down: ## Run kubectl delete on kubernetes config directory
 	@kubectl delete -f k8s/
 
+prev-readme: ## Compile readme and preview in browser
+	@pandoc -s README.md -o README.html
+	@$$BROWSER README.html
+
 proto: ## Run protoc compiler
 	@protoc -I=./messages --go_out=./pb --go_opt=paths=source_relative --go-grpc_out=./pb --go-grpc_opt=paths=source_relative ./messages/*.proto
 
