@@ -9,6 +9,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    container: golang:alpine
     # Service containers to run with `container-job`
     services:
       # Label used to access the service container
@@ -18,12 +19,19 @@ jobs:
         # Provide the password for postgres
         env:
           POSTGRES_PASSWORD: postgres
+        # Set health checks to wait until postgres has started
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.17
+    - name: Check out repository code
+      uses: actions/checkout@v2
+    # - name: Set up Go
+    #   uses: actions/setup-go@v2
+    #   with:
+    #     go-version: 1.17
     - name: Test
       env:
         JWT_SECRET: ${{ secrets.JWTSECRET }}
@@ -32,4 +40,4 @@ jobs:
         DB_HOST: postgres
         DB_NAME: postgres
         DB_PORT: 5432
-      run: CI=true go test -v ./...
+      run: CI=true CGO_ENABLED=0 go test -v ./...
