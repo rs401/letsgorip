@@ -1,0 +1,23 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: golang:alpine
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v2
+    - name: Build API
+      run: CI=true CGO_ENABLED=0 go build -o api/api api/main.go
+    - name: Build Auth service
+      run: CI=true CGO_ENABLED=0 go build -o auth/authsvc auth/main.go
+    - name: Build Forums service
+      run: CI=true CGO_ENABLED=0 go build -o forums/forumsvc forums/main.go
+    - name: Build Places service
+      run: CI=true CGO_ENABLED=0 go build -o places/placesvc places/main.go
