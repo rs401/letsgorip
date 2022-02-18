@@ -29,7 +29,7 @@ jobs:
         JWT_SECRET: ${{ secrets.JWTSECRET }}
         REFRESH_SECRET: ${{ secrets.REFRESHSECRET }}
         DB_USER: postgres
-        DB_HOST: localhost
+        DB_HOST: postgres
         DB_NAME: postgres
         DB_PORT: 5432
       run: CI=true go test -v ./...
