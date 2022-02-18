@@ -39,5 +39,6 @@ jobs:
         DB_USER: postgres
         DB_HOST: postgres
         DB_NAME: postgres
+        DB_PASS: postgres
         DB_PORT: 5432
       run: CI=true CGO_ENABLED=0 go test -v ./...
