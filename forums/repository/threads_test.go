@@ -21,7 +21,7 @@ var (
 func init() {
 	err := godotenv.Load("../.env.dev")
 	if err != nil {
-		log.Fatalf("Error loading environment variables: %v", err)
+		log.Printf("Error loading .env file (production?): %v\n", err)
 	}
 
 	cfg := db.NewConfig()
