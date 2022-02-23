@@ -1,0 +1,20 @@
+<div class="sign-in-form">
+    <div class="form-group">
+        <legend>Sign In</legend>
+        <app-flash-message [message]='signInMessage'></app-flash-message>
+        <div class="form-group">
+            <label>Email:</label>
+            <input class="form-control" type="email" [formControl]="emailControl" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input class="form-control" type="password" [formControl]="passwordControl">
+        </div>
+    </div>
+    <div class="form-group pt-2">
+        <button class="btn btn-primary" (click)="signin()">Sign In</button>
+        <hr>
+        <span class="form-text">Not a member yet?</span><br>
+        <button class="btn btn-primary mt-2" routerLink="../sign-up" routerLinkActive="active">Sign Up</button>
+    </div>
+</div>

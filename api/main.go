@@ -10,6 +10,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
+	"github.com/rs/cors"
 	"github.com/rs401/letsgorip/api/handlers"
 	"github.com/rs401/letsgorip/api/middlewares"
 	"github.com/rs401/letsgorip/api/routes"
@@ -90,7 +91,8 @@ func main() {
 	middlewares.SetupMiddleWares(router)
 	// Listen
 	log.Printf("Listening on port :%d\n", apiPort)
-	err = http.ListenAndServe(fmt.Sprintf(":%d", apiPort), router)
+	corz := cors.AllowAll().Handler(router)
+	err = http.ListenAndServe(fmt.Sprintf(":%d", apiPort), corz)
 	if err != nil {
 		log.Fatalf("Error: %v\n", err)
 	}

@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { User } from 'src/app/models/user';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  @Input() user?: User;
 
+  constructor(private auth: AuthService) { 
+    // this.auth.user.subscribe( user => this.user = user);
+  }
+  
   ngOnInit(): void {
   }
+  
+  // isEmptyObject(obj: Object) {
+  //   return (obj && (Object.keys(obj).length === 0));
+  // }
 
 }

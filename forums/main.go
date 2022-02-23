@@ -9,6 +9,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/rs401/letsgorip/db"
+	"github.com/rs401/letsgorip/forums/models"
 	"github.com/rs401/letsgorip/forums/repository"
 	"github.com/rs401/letsgorip/forums/service"
 	"github.com/rs401/letsgorip/pb"
@@ -30,6 +31,15 @@ func main() {
 	}
 
 	forumsRepo := repository.NewForumsRepository(conn)
+	// I think I'm going to seed forums here
+	forums, err := forumsRepo.GetForums()
+	if err != nil {
+		log.Fatalf("Error checking if forums need to be seeded... : %v", err)
+	}
+	if len(forums) == 0 {
+		// Seed the forums
+		seedForums(forumsRepo)
+	}
 	forumService := service.NewForumService(forumsRepo)
 
 	port, err := strconv.Atoi(os.Getenv("FORUMSVC_PORT"))
@@ -48,4 +58,29 @@ func main() {
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("Error Serving: %v\n", err)
 	}
+}
+
+var states []string = []string{"Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"}
+
+func seedForums(fr repository.ForumsRepository) error {
+	seeds := createForums()
+	for _, seed := range seeds {
+		if err := fr.CreateForum(seed); err != nil {
+			log.Fatalf("Error seeding forums: %v", err)
+		}
+	}
+	log.Println("Finished seeding Forums")
+	return nil
+}
+
+func createForums() []*models.Forum {
+	var seeds []*models.Forum = make([]*models.Forum, 0)
+	for _, state := range states {
+		var f *models.Forum = new(models.Forum)
+		f.UserId = 0
+		f.Title = state
+		f.Description = fmt.Sprintf("Find people to off-road with in %s", state)
+		seeds = append(seeds, f)
+	}
+	return seeds
 }

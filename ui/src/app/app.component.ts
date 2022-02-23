@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { User } from './models/user';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title: string = 'ui';
+  
+  public currentUser?: User;
+
+  constructor(private auth: AuthService) {
+    this.auth.user.subscribe( user => this.currentUser = user);
+  }
 }

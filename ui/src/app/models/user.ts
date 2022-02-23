@@ -1,17 +1,31 @@
 export class User {
-  public ID?: number;
-  public Name?: string;
-  public Email?: string;
-  public Role?: number;
-  public CreatedAt?: Date;
-  public UpdatedAt?: Date;
+  public id?: number;
+  public name?: string;
+  public email?: string;
+  public role?: number;
+  public createdAt?: Date;
+  public updatedAt?: Date;
 
   constructor() {}
 }
 
 export class SignIn {
-  public Email?: string;
-  public Password?: string;
+  public email?: string;
+  public password?: string;
 
-  constructor() {}
+  constructor(email: string, password: string) {
+    this.email = email;
+    this.password = password;
+  }
+}
+export class SignUp {
+  public name?: string;
+  public email?: string;
+  public password?: string;
+
+  constructor(name: string, email: string, password: string) {
+    this.name = name;
+    this.email = email;
+    this.password = password;
+  }
 }

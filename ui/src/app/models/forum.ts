@@ -1,13 +1,13 @@
 import { Thread } from "./thread";
 
 export class Forum {
-  Id?: number;
-  UserId?: number;
-  Title?: string;
-  Description?: string;
-  Threads?: Array<Thread>;
-  CreatedAt?: Date;
-  UpdatedAt?: Date;
+  id?: number;
+  user_id?: number;
+  title?: string;
+  description?: string;
+  threads?: Array<Thread>;
+  created_at?: Date;
+  updated_at?: Date;
 
   constructor() {}
 }
