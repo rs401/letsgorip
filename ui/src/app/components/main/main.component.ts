@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { Forum } from 'src/app/models/forum';
 import { ForumService } from 'src/app/services/forum.service';
@@ -11,9 +12,10 @@ import { ForumService } from 'src/app/services/forum.service';
 export class MainComponent implements OnInit {
 
   public forums: Forum[] = [];
+  stateForm!: FormGroup;
 
-  constructor(private forumService: ForumService) {
-
+  constructor(private forumService: ForumService, private fb:FormBuilder) {
+    
   }
 
   ngOnInit(): void {
@@ -26,6 +28,13 @@ export class MainComponent implements OnInit {
       error: (err) => {console.log('Error: ' + err);},
       complete: () => {console.log('Completed GET Forums');},
     });
+    this.stateForm = this.fb.group({
+      state: [0]
+    });
+  }
+
+  update() {
+    console.log(this.stateForm.value)
   }
 
 }

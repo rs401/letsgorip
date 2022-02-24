@@ -1,3 +1,14 @@
 <div>
-    <div *ngFor="let forum of forums">{{forum.title}}</div>
+    <h3>Choose your Off-Road state</h3>
+    <form [formGroup]="stateForm" >
+    <select class="form-select" (change)="update()" formControlName="state">
+        <option  [ngValue]="0" selected disabled>Please choose a State</option>
+        <option *ngFor="let forum of forums" [ngValue]="forum.id" >
+            {{forum.title}}
+        </option>
+    </select>
+    </form>
+    <div *ngFor="let forum of forums">
+        Id: {{forum.id}} - Title: {{forum.title}}
+    </div>
 </div>
