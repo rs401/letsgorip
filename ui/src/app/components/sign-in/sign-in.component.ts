@@ -31,7 +31,7 @@ export class SignInComponent implements OnInit {
           console.log('response: ' + res);
           this.router.navigateByUrl('/');
         },
-        error: (err) => {this.showFlashMessage(err)},
+        error: (err) => {this.showFlashMessage(err.error.error)},
         complete: () => console.info('complete')
       });
     } else {

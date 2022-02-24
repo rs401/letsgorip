@@ -11,15 +11,14 @@ export class HeaderComponent implements OnInit {
 
   @Input() user?: User;
 
-  constructor(private auth: AuthService) { 
-    // this.auth.user.subscribe( user => this.user = user);
-  }
+  constructor(private auth: AuthService) { }
   
   ngOnInit(): void {
   }
   
-  // isEmptyObject(obj: Object) {
-  //   return (obj && (Object.keys(obj).length === 0));
-  // }
+  signOut() {
+    this.auth.signout();
+    window.location.reload();
+  }
 
 }

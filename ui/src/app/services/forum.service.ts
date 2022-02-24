@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { Forum } from '../models/forum';
 
 @Injectable({
@@ -7,10 +8,9 @@ import { Forum } from '../models/forum';
 })
 export class ForumService {
 
-  readonly ROOT_URL;
+  readonly ROOT_URL = environment.root_url;
 
   constructor(private http: HttpClient) {
-    this.ROOT_URL = 'http://192.168.49.2:32410';
   }
 
   getForums() {

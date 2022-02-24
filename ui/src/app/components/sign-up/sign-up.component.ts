@@ -42,9 +42,15 @@ export class SignUpComponent implements OnInit {
           console.log('response: ' + res);
           this.router.navigateByUrl('/');
         },
-        error: (err) => {this.showFlashMessage(err)},
+        error: (err) => {this.showFlashMessage(err.error.error)},
         complete: () => console.info('complete')
       });
+    } else if(!name){
+      this.showFlashMessage("Name cannot be empty.");
+    } else if(!email){
+      this.showFlashMessage("Email cannot be empty.");
+    } else if(!password){
+      this.showFlashMessage("Password cannot be empty.");
     }
   }
 
