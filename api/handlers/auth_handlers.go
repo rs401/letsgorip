@@ -185,7 +185,7 @@ func (ah *authHandlers) GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	user.FromProtoBuffer(pbUser)
-	w.WriteHeader(http.StatusFound)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(user)
 }
 

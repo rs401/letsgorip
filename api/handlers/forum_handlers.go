@@ -124,7 +124,7 @@ func (fh *forumHandlers) GetForum(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	forum.FromProtoBuffer(pbForum)
-	w.WriteHeader(http.StatusFound)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(forum)
 }
 
@@ -147,7 +147,7 @@ func (fh *forumHandlers) GetThread(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	thread.FromProtoBuffer(pbThread)
-	w.WriteHeader(http.StatusFound)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(thread)
 }
 
@@ -170,7 +170,7 @@ func (fh *forumHandlers) GetPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	post.FromProtoBuffer(pbPost)
-	w.WriteHeader(http.StatusFound)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(post)
 }
 

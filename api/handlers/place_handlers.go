@@ -69,7 +69,7 @@ func (ph *placeHandlers) GetPlace(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	place.FromProtoBuffer(pbPlace)
-	w.WriteHeader(http.StatusFound)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(place)
 }
 
