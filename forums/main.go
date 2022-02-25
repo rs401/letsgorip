@@ -38,7 +38,10 @@ func main() {
 	}
 	if len(forums) == 0 {
 		// Seed the forums
-		seedForums(forumsRepo)
+		err := seedForums(forumsRepo)
+		if err != nil {
+			log.Fatalf("Error seeding forums: %v", err)
+		}
 	}
 	forumService := service.NewForumService(forumsRepo)
 
@@ -66,10 +69,43 @@ func seedForums(fr repository.ForumsRepository) error {
 	seeds := createForums()
 	for _, seed := range seeds {
 		if err := fr.CreateForum(seed); err != nil {
-			log.Fatalf("Error seeding forums: %v", err)
+			return err
 		}
 	}
 	log.Println("Finished seeding Forums")
+	// Seed Threads
+	log.Println("Beginning seeding Threads")
+	err := seedThreads(fr, seeds)
+	if err != nil {
+		return err
+	}
+	log.Println("Finished seeding Threads")
+	return nil
+}
+
+func seedThreads(fr repository.ForumsRepository, seeds []*models.Forum) error {
+	for _, forum := range seeds {
+		thread := &models.Thread{
+			ForumId: forum.Id,
+			UserId:  forum.UserId,
+			Title:   "Welcome to the forum.",
+			Msg:     "This is the first thread in this forum, please take the time to say 'Hello 👋'.",
+		}
+		err := fr.CreateThread(thread)
+		if err != nil {
+			return err
+		}
+		// Seed a Post
+		post := &models.Post{
+			ThreadId: thread.Id,
+			UserId:   forum.UserId,
+			Msg:      "Hello 👋, 🤖.",
+		}
+		err = fr.CreatePost(post)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
