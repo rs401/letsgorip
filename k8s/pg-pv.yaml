@@ -5,20 +5,30 @@ metadata:
   labels:
     type: local
 spec:
-  storageClassName: local-storage
   capacity:
     storage: 1Gi
+  volumeMode: Filesystem
   accessModes:
     - ReadWriteOnce
-  hostPath:
-    path: "/mnt/data"
+  persistentVolumeReclaimPolicy: Delete
+  # storageClassName: local-storage
+  local:
+    path: "/tmp/data"
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - lgr-postgres
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: lgr-pg-pv-data
 spec:
-  storageClassName: local-storage
+  # storageClassName: ""
   accessModes:
     - ReadWriteOnce
   resources:

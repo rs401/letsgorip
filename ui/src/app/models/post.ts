@@ -1,10 +1,10 @@
 export class Post {
-  Id?: number;
-  ThreadId?: number;
-  UserId?: number;
-  Msg?: string;
-  CreatedAt?: Date;
-  UpdatedAt?: Date;
+  id?: number;
+  thread_id?: number;
+  user_id?: number;
+  msg?: string;
+  created_at?: Date;
+  updated_at?: Date;
 
   constructor() {}
 }

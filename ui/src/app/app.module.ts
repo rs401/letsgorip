@@ -10,6 +10,7 @@ import { MainComponent } from './components/main/main.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { FlashMessageComponent } from './components/flash-message/flash-message.component';
+import { ForumComponent } from './components/forum/forum.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { FlashMessageComponent } from './components/flash-message/flash-message.
     MainComponent,
     SignInComponent,
     SignUpComponent,
-    FlashMessageComponent
+    FlashMessageComponent,
+    ForumComponent
   ],
   imports: [
     BrowserModule,

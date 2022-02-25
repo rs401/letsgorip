@@ -1,0 +1,9 @@
+<div class="row text-center border-bottom rounded-bottom">
+    <h2 class="center">{{ forum?.title }}!</h2>
+    <p>{{ forum?.description }}</p>
+</div>
+<div class="row rounded border" *ngFor="let thread of threads; even as isEven" [class]="isEven ? 'even' : 'odd'">
+    <div class=" py-3" >
+        <a (click)="viewThread(thread)">{{ thread.title }}</a>
+    </div>
+</div>

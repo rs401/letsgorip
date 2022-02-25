@@ -14,7 +14,7 @@ export class MainComponent implements OnInit {
   public forums: Forum[] = [];
   stateForm!: FormGroup;
 
-  constructor(private forumService: ForumService, private fb:FormBuilder) {
+  constructor(private forumService: ForumService, private fb:FormBuilder, private router: Router) {
     
   }
 
@@ -26,7 +26,7 @@ export class MainComponent implements OnInit {
         });
       },
       error: (err) => {console.log('Error: ' + err);},
-      complete: () => {console.log('Completed GET Forums');},
+      complete: () => {console.log('MainComponent: Completed GET Forums');},
     });
     this.stateForm = this.fb.group({
       state: [0]
@@ -35,6 +35,7 @@ export class MainComponent implements OnInit {
 
   update() {
     console.log(this.stateForm.value)
+    this.router.navigateByUrl('/forum/' + this.stateForm.value.state)
   }
 
 }
