@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  root_url: 'http://192.168.49.2:32153'
+  root_url: 'http://192.168.49.2:32177'
 };
 
 /*

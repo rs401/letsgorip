@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { map, Observable } from 'rxjs';
 import { Forum } from 'src/app/models/forum';
 import { Thread } from 'src/app/models/thread';
@@ -16,7 +16,7 @@ export class ForumComponent implements OnInit {
   public forum?: Forum;
   public threads: Thread[] = [];
 
-  constructor(private route: ActivatedRoute, private forumService: ForumService) {
+  constructor(private route: ActivatedRoute, private router: Router, private forumService: ForumService) {
     this.forumService.forum.subscribe(f => this.forum = f);
   }
 
@@ -39,7 +39,8 @@ export class ForumComponent implements OnInit {
   }
 
   viewThread(thread: Thread) {
-    console.log(thread);
+    this.router.navigateByUrl(`/forum/${thread.forum_id}/${thread.id}`);
+    // this.router.navigateByUrl(`/forum/${thread.forum_id}/thread/${thread.id}`);
   }
 
 }

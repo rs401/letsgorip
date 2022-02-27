@@ -1,0 +1,16 @@
+<p>thread works!</p>
+<div class="row">
+    <div class="col-2">
+        User: {{ thread?.user_id }}
+    </div>
+    <div class="col">
+        <h2 class="h4">
+            {{ thread?.title }}
+        </h2>
+        {{ thread?.msg }}
+    </div>
+</div>
+<button routerLink="new" class="btn btn-sm btn-new">+ Post Reply</button>
+<div class="row" *ngFor="let post of posts">
+    reply post
+</div>

@@ -34,7 +34,6 @@ export class AuthService {
           localStorage.setItem('lgrToken', data.headers.get('Authorization') || '');
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.userSubject.next(user);
-          console.log(user.name);
         })
       );
   }
@@ -52,14 +51,16 @@ export class AuthService {
           localStorage.setItem('lgrToken', data.headers.get('Authorization') || '');
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.userSubject.next(user);
-          console.log(user.name);
         }),
         catchError((err) => {return err;})
       );
   }
 
   signout() {
-    localStorage.clear();
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('lgrToken');
+    this.token = '';
+    this.userSubject.next(new User);
   }
 
 }

@@ -11,6 +11,9 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { FlashMessageComponent } from './components/flash-message/flash-message.component';
 import { ForumComponent } from './components/forum/forum.component';
+import { ThreadComponent } from './components/thread/thread.component';
+import { NewThreadComponent } from './components/new-thread/new-thread.component';
+import { NewPostComponent } from './components/new-post/new-post.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,10 @@ import { ForumComponent } from './components/forum/forum.component';
     SignInComponent,
     SignUpComponent,
     FlashMessageComponent,
-    ForumComponent
+    ForumComponent,
+    ThreadComponent,
+    NewThreadComponent,
+    NewPostComponent
   ],
   imports: [
     BrowserModule,
