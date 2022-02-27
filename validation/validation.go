@@ -1,3 +1,5 @@
+// Package validation provides methods to validate the various models for this
+// project.
 package validation
 
 import (
@@ -59,6 +61,7 @@ func IsValidSignUp(user *pb.User) error {
 	return nil
 }
 
+// IsValidForum verifies the given forum is valid.
 func IsValidForum(forum *pb.Forum) error {
 	if IsEmptyString(forum.Title) {
 		return ErrEmptyTitle
@@ -74,6 +77,7 @@ func IsValidForum(forum *pb.Forum) error {
 	return nil
 }
 
+// IsValidThread verifies the given thread is valid.
 func IsValidThread(thread *pb.Thread) error {
 	if IsEmptyString(thread.Title) {
 		return ErrEmptyTitle
@@ -93,6 +97,7 @@ func IsValidThread(thread *pb.Thread) error {
 	return nil
 }
 
+// IsValidPost verifies the given post is valid.
 func IsValidPost(post *pb.Post) error {
 	if IsEmptyString(post.Msg) {
 		return ErrEmptyMsg
@@ -109,6 +114,7 @@ func IsValidPost(post *pb.Post) error {
 	return nil
 }
 
+// IsValidPlace verifies the given place is valid.
 func IsValidPlace(place *pb.Place) error {
 	// Name not empty
 	if IsEmptyString(place.Name) {
@@ -143,24 +149,19 @@ func IsValidEmail(email string) bool {
 
 // IsValidPassword verifies if a password is valid
 func IsValidPassword(s string) bool {
-	var (
-		isMin   bool
-		special bool
-		number  bool
-		upper   bool
-		lower   bool
-		errStr  string
-	)
+	special := false
+	number := false
+	upper := false
+	lower := false
 
 	// Check length
 	if len(s) < minPwLen || len(s) > maxPwLen {
-		isMin = false
-		errStr += fmt.Sprintf("password length must be between %d and %d, ", minPwLen, maxPwLen)
+		return false
 	}
 
 	// Check other requirements
 	for _, c := range s {
-		if special && number && upper && lower && isMin {
+		if special && number && upper && lower {
 			break
 		}
 
@@ -176,24 +177,10 @@ func IsValidPassword(s string) bool {
 		}
 	}
 
-	// Append error messages
-	if !special {
-		errStr += "should contain at least a single special character, "
-	}
-	if !number {
-		errStr += "should contain at least a single digit, "
-	}
-	if !lower {
-		errStr += "should contain at least a single lowercase letter, "
-	}
-	if !upper {
-		errStr += "should contain at least single uppercase letter, "
-	}
-
-	// If there are any errors
-	if len(errStr) > 0 {
-		ErrInvalidPassword = errors.New(errStr)
-		return false
+	for _, v := range []bool{special, number, upper, lower} {
+		if !v {
+			return false
+		}
 	}
 
 	// No errors
