@@ -42,6 +42,8 @@ func NewForumHandlers(forumSvcClient pb.ForumServiceClient) ForumHandlers {
 	return &forumHandlers{forumSvcClient: forumSvcClient}
 }
 
+// CreateForum is the handlerfunc that makes the service client call to create a
+// Forum.
 func (fh *forumHandlers) CreateForum(w http.ResponseWriter, r *http.Request) {
 	var forum models.Forum
 	// Decode body
@@ -63,6 +65,8 @@ func (fh *forumHandlers) CreateForum(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(forum)
 }
 
+// CreateThread is the handlerfunc that makes the service client call to create
+// a Thread.
 func (fh *forumHandlers) CreateThread(w http.ResponseWriter, r *http.Request) {
 	var thread models.Thread
 	// Decode body
@@ -84,6 +88,8 @@ func (fh *forumHandlers) CreateThread(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(thread)
 }
 
+// CreatePost is the handlerfunc that makes the service client call to create a
+// Post.
 func (fh *forumHandlers) CreatePost(w http.ResponseWriter, r *http.Request) {
 	var post models.Post
 	// Decode body
@@ -105,6 +111,8 @@ func (fh *forumHandlers) CreatePost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(post)
 }
 
+// GetForum is the handlerfunc that makes the service client call retrieve a
+// Forum.
 func (fh *forumHandlers) GetForum(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var req pb.ForumIdRequest
@@ -128,6 +136,8 @@ func (fh *forumHandlers) GetForum(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(forum)
 }
 
+// GetThread is the handlerfunc that makes the service client call to retrieve a
+// Thread.
 func (fh *forumHandlers) GetThread(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var req pb.ForumIdRequest
@@ -151,6 +161,8 @@ func (fh *forumHandlers) GetThread(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(thread)
 }
 
+// GetPost is the handlerfunc that makes the service client call to retrieve a
+// Post.
 func (fh *forumHandlers) GetPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var req pb.ForumIdRequest
@@ -174,6 +186,8 @@ func (fh *forumHandlers) GetPost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(post)
 }
 
+// GetForums is the handlerfunc that makes the service client call to retrieve
+// all Forums.
 func (fh *forumHandlers) GetForums(w http.ResponseWriter, r *http.Request) {
 	var gfRequest pb.GetForumsRequest
 	var forums []*models.Forum = make([]*models.Forum, 0)
@@ -216,6 +230,8 @@ func (fh *forumHandlers) GetForums(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(forums)
 }
 
+// GetThreads is the handlerfunc that makes the service client call to retrieve
+// all Threads for a specific Forum.
 func (fh *forumHandlers) GetThreads(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var req pb.ForumIdRequest
@@ -266,6 +282,8 @@ func (fh *forumHandlers) GetThreads(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(threads)
 }
 
+// GetPosts is the handlerfunc that makes the service client call to retrieve
+// all Posts for a specific Thread.
 func (fh *forumHandlers) GetPosts(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var req pb.ForumIdRequest
@@ -316,6 +334,8 @@ func (fh *forumHandlers) GetPosts(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(posts)
 }
 
+// UpdateForum is the handlerfunc that makes the service client call to update a
+// Forum.
 func (fh *forumHandlers) UpdateForum(w http.ResponseWriter, r *http.Request) {
 	userId := tokenutils.ExtractUserId(r)
 	if userId == 0 {
@@ -363,6 +383,8 @@ func (fh *forumHandlers) UpdateForum(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(tmpForum)
 }
 
+// UpdateThread is the handlerfunc that makes the service client call to update
+// a Thread.
 func (fh *forumHandlers) UpdateThread(w http.ResponseWriter, r *http.Request) {
 	userId := tokenutils.ExtractUserId(r)
 	if userId == 0 {
@@ -422,6 +444,8 @@ func (fh *forumHandlers) UpdateThread(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(tmpThread)
 }
 
+// UpdatePost is the handlerfunc that makes the service client call to update a
+// Post.
 func (fh *forumHandlers) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	userId := tokenutils.ExtractUserId(r)
 	if userId == 0 {
@@ -481,6 +505,8 @@ func (fh *forumHandlers) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(tmpPost)
 }
 
+// DeleteForum is the handlerfunc that makes the service client call to delete a
+// Forum.
 func (fh *forumHandlers) DeleteForum(w http.ResponseWriter, r *http.Request) {
 	userId := tokenutils.ExtractUserId(r)
 	if userId == 0 {
@@ -526,6 +552,8 @@ func (fh *forumHandlers) DeleteForum(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"delete": "success"})
 }
 
+// DeleteThread is the handlerfunc that makes the service client call to delete
+// a Thread.
 func (fh *forumHandlers) DeleteThread(w http.ResponseWriter, r *http.Request) {
 	userId := tokenutils.ExtractUserId(r)
 	if userId == 0 {
@@ -571,6 +599,8 @@ func (fh *forumHandlers) DeleteThread(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"delete": "success"})
 }
 
+// DeletePost is the handlerfunc that makes the service client call to delete a
+// Post.
 func (fh *forumHandlers) DeletePost(w http.ResponseWriter, r *http.Request) {
 	userId := tokenutils.ExtractUserId(r)
 	if userId == 0 {

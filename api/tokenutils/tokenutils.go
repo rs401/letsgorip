@@ -15,19 +15,19 @@ import (
 	"github.com/google/uuid"
 )
 
-// Tokens holds an access token and a refresh token
+// Tokens holds an access token and a refresh token.
 type Tokens struct {
 	AccessToken  string
 	RefreshToken string
 }
 
-// Claims holds a UserId and standard claims
+// Claims holds a UserId and standard claims.
 type Claims struct {
 	UserId uint `json:"userid"` // User ID
 	jwt.StandardClaims
 }
 
-// CreateToken takes an ID and generates a Tokens
+// CreateToken takes an ID and generates a Tokens.
 func CreateToken(userid uint) (*Tokens, error) {
 	ts := &Tokens{}
 
@@ -57,6 +57,8 @@ func CreateToken(userid uint) (*Tokens, error) {
 	return ts, nil
 }
 
+// RefreshAccessToken takes a refresh token and updates the expiry time of the
+// access token.
 func RefreshAccessToken(refreshToken *jwt.Token) (string, error) {
 	if claims, ok := refreshToken.Claims.(*Claims); ok && refreshToken.Valid {
 		userid := claims.UserId
@@ -73,7 +75,7 @@ func RefreshAccessToken(refreshToken *jwt.Token) (string, error) {
 	return "", errors.New("bad refresh token")
 }
 
-// ExtractToken extracts an access token from request header
+// ExtractToken extracts an access token from request header.
 func ExtractToken(r *http.Request) string {
 	bearerToken := r.Header.Get("Authorization")
 	strArr := strings.Split(bearerToken, " ")
@@ -83,6 +85,7 @@ func ExtractToken(r *http.Request) string {
 	return ""
 }
 
+// ExtractRefreshToken extracts an refresh token from request cookie.
 func ExtractRefreshToken(r *http.Request) string {
 	cookie, err := r.Cookie("refresh_token")
 	if err != nil {
@@ -91,7 +94,7 @@ func ExtractRefreshToken(r *http.Request) string {
 	return cookie.Value
 }
 
-// VerifyToken verifies a token is legit
+// VerifyToken verifies a token is legit.
 func VerifyToken(r *http.Request) (*jwt.Token, error) {
 	tokenString := ExtractToken(r)
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
@@ -106,7 +109,7 @@ func VerifyToken(r *http.Request) (*jwt.Token, error) {
 	return token, nil
 }
 
-// VerifyRefreshToken verifies a refresh token is legit
+// VerifyRefreshToken verifies a refresh token is legit.
 func VerifyRefreshToken(r *http.Request) (*jwt.Token, error) {
 	tokenString := ExtractRefreshToken(r)
 	token, err := jwt.ParseWithClaims(tokenString, &Claims{}, func(token *jwt.Token) (interface{}, error) {
@@ -121,6 +124,7 @@ func VerifyRefreshToken(r *http.Request) (*jwt.Token, error) {
 	return token, nil
 }
 
+// StillValid takes a jwt.Token and verifies it hasn't expired.
 func StillValid(token *jwt.Token) bool {
 	if claims, ok := token.Claims.(*Claims); ok && token.Valid {
 		return claims.StandardClaims.ExpiresAt >= time.Now().Unix()
@@ -129,6 +133,7 @@ func StillValid(token *jwt.Token) bool {
 	return false
 }
 
+// ExtractUserId takes a http.Request and returns the corresponding user id.
 func ExtractUserId(r *http.Request) uint {
 	token, err := VerifyToken(r)
 	if err != nil {

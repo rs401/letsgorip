@@ -1,3 +1,4 @@
+// Package db provides access to the database.
 package db
 
 import (
@@ -10,6 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Connection interface defines the methods for the db Connection.
 type Connection interface {
 	DB() *gorm.DB
 }
@@ -18,10 +20,12 @@ type conn struct {
 	db *gorm.DB
 }
 
+// DB returns the corresponding gorm.DB.
 func (c *conn) DB() *gorm.DB {
 	return c.db
 }
 
+// NewConnection takes a db.Config and returns a new db Connection.
 func NewConnection(cfg Config) (Connection, error) {
 	dbc, err := gorm.Open(postgres.Open(cfg.ConnStr()), &gorm.Config{})
 	if err != nil {

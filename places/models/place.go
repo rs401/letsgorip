@@ -1,7 +1,9 @@
+// Package models provides places data models.
 package models
 
 import "github.com/rs401/letsgorip/pb"
 
+// Place is the data model for a Place
 type Place struct {
 	Id          uint64  `json:"id" gorm:"primaryKey"`
 	UserId      uint64  `json:"user_id" gorm:"not null"`
@@ -13,6 +15,7 @@ type Place struct {
 	UpdatedAt   int64   `json:"updated_at,omitempty" gorm:"autoUpdateTime"`
 }
 
+// ToProtoBuffer returns a protocol buffers version of the Place.
 func (p *Place) ToProtoBuffer() *pb.Place {
 	return &pb.Place{
 		Id:          p.Id,
@@ -26,6 +29,8 @@ func (p *Place) ToProtoBuffer() *pb.Place {
 	}
 }
 
+// FromProtoBuffer takes a pb place and 'loads' the current place with the
+// details.
 func (p *Place) FromProtoBuffer(place *pb.Place) {
 	p.Id = place.GetId()
 	p.UserId = place.GetUserId()

@@ -1,3 +1,4 @@
+// Package auth provides authentication/user API
 package main
 
 import (

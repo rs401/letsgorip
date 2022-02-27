@@ -1,3 +1,4 @@
+// Package repository provides methods for interacting with the data store.
 package repository
 
 import (
@@ -9,8 +10,10 @@ import (
 	"gorm.io/gorm"
 )
 
+// ErrorBadID is an error indicating a bad id.
 var ErrorBadID error = errors.New("bad id")
 
+// ForumsRepository interface defines the method signatures.
 type ForumsRepository interface {
 	CreateForum(forum *models.Forum) error
 	CreateThread(thread *models.Thread) error
@@ -34,29 +37,35 @@ type forumsRepository struct {
 	db *gorm.DB
 }
 
+// NewForumsRepository takes a db connection and returns a ForumsRepository.
 func NewForumsRepository(conn db.Connection) ForumsRepository {
 	return &forumsRepository{db: conn.DB()}
 }
 
+// CreateForum takes a forum and saves it to the database.
 func (fr *forumsRepository) CreateForum(forum *models.Forum) error {
 	return fr.db.Create(&forum).Error
 }
 
+// GetForum takes an id and retrieves and returns the Forum.
 func (fr *forumsRepository) GetForum(id uint64) (forum *models.Forum, err error) {
 	result := fr.db.Where("id = ?", id).First(&forum)
 	return forum, result.Error
 }
 
+// GetForumByTitle takes a title string and retrieves and returns the forum.
 func (fr *forumsRepository) GetForumByTitle(title string) (forum *models.Forum, err error) {
 	result := fr.db.Where("title = ?", title).First(&forum)
 	return forum, result.Error
 }
 
+// GetForums retrieves and returns all forums.
 func (fr *forumsRepository) GetForums() (forums []*models.Forum, err error) {
 	result := fr.db.Find(&forums)
 	return forums, result.Error
 }
 
+// UpdateForum takes a forum and updates it in the db.
 func (fr *forumsRepository) UpdateForum(forum *models.Forum) error {
 	var tmpForum = new(models.Forum)
 	fr.db.Find(&tmpForum, forum.Id)
@@ -69,6 +78,7 @@ func (fr *forumsRepository) UpdateForum(forum *models.Forum) error {
 	return fr.db.Save(&tmpForum).Error
 }
 
+// DeleteForum takes a forum id and deletes the forum from the database.
 func (fr *forumsRepository) DeleteForum(id uint64) error {
 	var forum models.Forum
 	fr.db.Find(&forum, id)
@@ -78,6 +88,7 @@ func (fr *forumsRepository) DeleteForum(id uint64) error {
 	return fr.db.Delete(&forum).Error
 }
 
+// DeleteAllForums deletes all forums from the database.
 func (fr *forumsRepository) DeleteAllForums() error {
 	return fr.db.Exec("DELETE FROM forums").Error
 }

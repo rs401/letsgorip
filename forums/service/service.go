@@ -1,3 +1,4 @@
+// Package service implements the pb ForumServiceServer
 package service
 
 import (
@@ -17,10 +18,12 @@ type forumService struct {
 	pb.UnimplementedForumServiceServer
 }
 
+// NewForumService takes a forums repository and returns a pb.ForumServiceServer
 func NewForumService(forumsRepository repository.ForumsRepository) pb.ForumServiceServer {
 	return &forumService{forumsRepository: forumsRepository}
 }
 
+// CreateForum validates the forum and calls the repositories CreateForum method.
 func (fs *forumService) CreateForum(ctx context.Context, req *pb.Forum) (*pb.ForumIdResponse, error) {
 	// Check valid forum
 	if err := validation.IsValidForum(req); err != nil {
@@ -50,6 +53,7 @@ LabelContinue:
 	return &pb.ForumIdResponse{Id: forum.Id}, nil
 }
 
+// CreateThread validates the thread and calls the repositories CreateThread method.
 func (fs *forumService) CreateThread(ctx context.Context, req *pb.Thread) (*pb.ForumIdResponse, error) {
 	// Check valid thread
 	if err := validation.IsValidThread(req); err != nil {
@@ -67,6 +71,7 @@ func (fs *forumService) CreateThread(ctx context.Context, req *pb.Thread) (*pb.F
 	return &pb.ForumIdResponse{Id: thread.Id}, nil
 }
 
+// CreatePost validates the post and calls the repositories CreatePost method.
 func (fs *forumService) CreatePost(ctx context.Context, req *pb.Post) (*pb.ForumIdResponse, error) {
 	// Check valid post
 	if err := validation.IsValidPost(req); err != nil {
@@ -83,6 +88,7 @@ func (fs *forumService) CreatePost(ctx context.Context, req *pb.Post) (*pb.Forum
 	return &pb.ForumIdResponse{Id: post.Id}, nil
 }
 
+// GetForum takes a ForumIdRequest and returns the Forum.
 func (fs *forumService) GetForum(ctx context.Context, req *pb.ForumIdRequest) (*pb.Forum, error) {
 	forum, err := fs.forumsRepository.GetForum(req.GetId())
 	if err != nil {
@@ -91,6 +97,7 @@ func (fs *forumService) GetForum(ctx context.Context, req *pb.ForumIdRequest) (*
 	return forum.ToProtoBuffer(), nil
 }
 
+// GetForums takes a GetForumsRequest and returns all forums.
 func (fs *forumService) GetForums(req *pb.GetForumsRequest, stream pb.ForumService_GetForumsServer) error {
 	forums, err := fs.forumsRepository.GetForums()
 	if err != nil {
@@ -105,6 +112,7 @@ func (fs *forumService) GetForums(req *pb.GetForumsRequest, stream pb.ForumServi
 	return nil
 }
 
+// GetThread takes a ForumIdRequest and returns the Thread.
 func (fs *forumService) GetThread(ctx context.Context, req *pb.ForumIdRequest) (*pb.Thread, error) {
 	thread, err := fs.forumsRepository.GetThread(req.GetId())
 	if err != nil {
@@ -113,6 +121,7 @@ func (fs *forumService) GetThread(ctx context.Context, req *pb.ForumIdRequest) (
 	return thread.ToProtoBuffer(), nil
 }
 
+// GetThreads takes a ForumIdRequest and returns all threads for that forum.
 func (fs *forumService) GetThreads(req *pb.ForumIdRequest, stream pb.ForumService_GetThreadsServer) error {
 	threads, err := fs.forumsRepository.GetThreads(req.GetId())
 	if err != nil {
@@ -127,6 +136,7 @@ func (fs *forumService) GetThreads(req *pb.ForumIdRequest, stream pb.ForumServic
 	return nil
 }
 
+// GetPost takes a ForumIdRequest and returns the Post.
 func (fs *forumService) GetPost(ctx context.Context, req *pb.ForumIdRequest) (*pb.Post, error) {
 	post, err := fs.forumsRepository.GetPost(req.GetId())
 	if err != nil {
@@ -135,6 +145,8 @@ func (fs *forumService) GetPost(ctx context.Context, req *pb.ForumIdRequest) (*p
 	return post.ToProtoBuffer(), nil
 }
 
+// GetPosts takes a ForumIdRequest(it will hold a thread id) and returns all
+// posts for that thread.
 func (fs *forumService) GetPosts(req *pb.ForumIdRequest, stream pb.ForumService_GetPostsServer) error {
 	posts, err := fs.forumsRepository.GetPosts(req.GetId())
 	if err != nil {
@@ -149,6 +161,8 @@ func (fs *forumService) GetPosts(req *pb.ForumIdRequest, stream pb.ForumService_
 	return nil
 }
 
+// UpdateForum takes a pb.Forum, validates the details and calls the
+// repositories Update method.
 func (fs *forumService) UpdateForum(ctx context.Context, req *pb.Forum) (*pb.Forum, error) {
 	// Verify forum exists
 	forum, err := fs.forumsRepository.GetForum(req.GetId())
@@ -174,6 +188,8 @@ func (fs *forumService) UpdateForum(ctx context.Context, req *pb.Forum) (*pb.For
 	return forum.ToProtoBuffer(), err
 }
 
+// UpdateThread takes a pb.Thread, validates the details and calls the
+// repositories Update method.
 func (fs *forumService) UpdateThread(ctx context.Context, req *pb.Thread) (*pb.Thread, error) {
 	// Verify thread exists
 	thread, err := fs.forumsRepository.GetThread(req.GetId())
@@ -200,6 +216,8 @@ func (fs *forumService) UpdateThread(ctx context.Context, req *pb.Thread) (*pb.T
 
 }
 
+// UpdatePost takes a pb.Post, validates the details and calls the repositories
+// Update method.
 func (fs *forumService) UpdatePost(ctx context.Context, req *pb.Post) (*pb.Post, error) {
 	// Verify post exists
 	post, err := fs.forumsRepository.GetPost(req.GetId())
@@ -221,6 +239,7 @@ func (fs *forumService) UpdatePost(ctx context.Context, req *pb.Post) (*pb.Post,
 
 }
 
+// DeleteForum takes a ForumIdRequest and calls the repositories Delete method.
 func (fs *forumService) DeleteForum(ctx context.Context, req *pb.ForumIdRequest) (*pb.ForumIdResponse, error) {
 	err := fs.forumsRepository.DeleteForum(req.GetId())
 	if err != nil {
@@ -229,6 +248,8 @@ func (fs *forumService) DeleteForum(ctx context.Context, req *pb.ForumIdRequest)
 	return &pb.ForumIdResponse{Id: req.GetId()}, nil
 }
 
+// DeleteThread takes a thread id in a ForumIdRequest and calls the repositories
+// DeleteThread method.
 func (fs *forumService) DeleteThread(ctx context.Context, req *pb.ForumIdRequest) (*pb.ForumIdResponse, error) {
 	err := fs.forumsRepository.DeleteThread(req.GetId())
 	if err != nil {
@@ -237,6 +258,8 @@ func (fs *forumService) DeleteThread(ctx context.Context, req *pb.ForumIdRequest
 	return &pb.ForumIdResponse{Id: req.GetId()}, nil
 }
 
+// DeletePost takes a post id in a ForumIdRequest and calls the repositories
+// DeletePost method.
 func (fs *forumService) DeletePost(ctx context.Context, req *pb.ForumIdRequest) (*pb.ForumIdResponse, error) {
 	err := fs.forumsRepository.DeletePost(req.GetId())
 	if err != nil {

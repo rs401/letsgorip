@@ -13,6 +13,7 @@ import (
 	"github.com/rs401/letsgorip/places/models"
 )
 
+// PlaceHandlers is the interface defining the place handlerfuncs
 type PlaceHandlers interface {
 	CreatePlace(w http.ResponseWriter, r *http.Request)
 	GetPlace(w http.ResponseWriter, r *http.Request)
@@ -25,10 +26,13 @@ type placeHandlers struct {
 	placeSvcClient pb.PlaceServiceClient
 }
 
+// NewPlaceHandlers takes a pb.PlaceServiceClient and returns a PlaceHandlers
 func NewPlaceHandlers(placeSvcClient pb.PlaceServiceClient) PlaceHandlers {
 	return &placeHandlers{placeSvcClient: placeSvcClient}
 }
 
+// CreatePlace is the handlerfunc that makes the service client call to create a
+// Place.
 func (ph *placeHandlers) CreatePlace(w http.ResponseWriter, r *http.Request) {
 	var place models.Place
 	// Decode json place
@@ -50,6 +54,8 @@ func (ph *placeHandlers) CreatePlace(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(place)
 }
 
+// GetPlace is the handlerfunc that makes the service client call to retrieve a
+// Place.
 func (ph *placeHandlers) GetPlace(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	var req pb.PlaceIdRequest
@@ -73,6 +79,8 @@ func (ph *placeHandlers) GetPlace(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(place)
 }
 
+// GetPlaces is the handlerfunc that makes the service client call to retrieve
+// all Places for a specific state.
 func (ph *placeHandlers) GetPlaces(w http.ResponseWriter, r *http.Request) {
 	var gpRequest pb.GetPlacesRequest
 	var places []*models.Place = make([]*models.Place, 0)
@@ -115,6 +123,8 @@ func (ph *placeHandlers) GetPlaces(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(places)
 }
 
+// UpdatePlace is the handlerfunc that makes the service client call update a
+// Place.
 func (ph *placeHandlers) UpdatePlace(w http.ResponseWriter, r *http.Request) {
 	userId := tokenutils.ExtractUserId(r)
 	if userId == 0 {
@@ -162,6 +172,8 @@ func (ph *placeHandlers) UpdatePlace(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(tmpPlace)
 }
 
+// DeletePlace is the handlerfunc that makes the service client call to delete a
+// Place.
 func (ph *placeHandlers) DeletePlace(w http.ResponseWriter, r *http.Request) {
 	userId := tokenutils.ExtractUserId(r)
 	if userId == 0 {

@@ -1,3 +1,4 @@
+// Package forums provides forums API
 package main
 
 import (

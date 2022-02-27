@@ -1,7 +1,9 @@
+// Package models provides the data models for the forum service.
 package models
 
 import "github.com/rs401/letsgorip/pb"
 
+// Thread is the data model for a Thread.
 type Thread struct {
 	Id        uint64  `json:"id,omitempty" gorm:"primaryKey"`
 	ForumId   uint64  `json:"forum_id" gorm:"not null"`
@@ -13,6 +15,7 @@ type Thread struct {
 	UpdatedAt int64   `json:"updated_at" gorm:"autoUpdateTime"`
 }
 
+// ToProtoBuffer returns a protocol buffers version of the Thread.
 func (t *Thread) ToProtoBuffer() *pb.Thread {
 	return &pb.Thread{
 		Id:        t.Id,
@@ -25,6 +28,8 @@ func (t *Thread) ToProtoBuffer() *pb.Thread {
 	}
 }
 
+// FromProtoBuffer takes a pb thread and 'loads' the current thread with the
+// details.
 func (t *Thread) FromProtoBuffer(thread *pb.Thread) {
 	t.Id = thread.GetId()
 	t.ForumId = thread.GetForumId()

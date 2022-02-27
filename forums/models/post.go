@@ -1,7 +1,9 @@
+// Package models provides the data models for the forum service.
 package models
 
 import "github.com/rs401/letsgorip/pb"
 
+// Post is the data model for a Post.
 type Post struct {
 	Id        uint64 `json:"id" gorm:"primaryKey"`
 	ThreadId  uint64 `json:"thread_id" gorm:"not null"`
@@ -11,6 +13,7 @@ type Post struct {
 	UpdatedAt int64  `json:"updated_at" gorm:"autoUpdateTime"`
 }
 
+// ToProtoBuffer returns a protocol buffers version of the Post.
 func (p *Post) ToProtoBuffer() *pb.Post {
 	return &pb.Post{
 		Id:        p.Id,
@@ -22,6 +25,8 @@ func (p *Post) ToProtoBuffer() *pb.Post {
 	}
 }
 
+// FromProtoBuffer takes a pb post and 'loads' the current post with the
+// details.
 func (p *Post) FromProtoBuffer(post *pb.Post) {
 	p.Id = post.GetId()
 	p.ThreadId = post.GetThreadId()

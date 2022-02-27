@@ -1,3 +1,4 @@
+// Package service implements the pb AuthServiceServer
 package service
 
 import (
@@ -17,10 +18,12 @@ type authService struct {
 	pb.UnimplementedAuthServiceServer
 }
 
+// NewAuthService takes a users repository and returns a pb.AuthServiceServer.
 func NewAuthService(usersRepository repository.UsersRepository) pb.AuthServiceServer {
 	return &authService{usersRepository: usersRepository}
 }
 
+// SignUp validates the user and calls the repositories Save method.
 func (as *authService) SignUp(ctx context.Context, req *pb.User) (*pb.User, error) {
 	err := validation.IsValidSignUp(req)
 	if err != nil {
@@ -61,6 +64,7 @@ func (as *authService) SignUp(ctx context.Context, req *pb.User) (*pb.User, erro
 
 }
 
+// SignIn verifies the user details and returns a user.
 func (as *authService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.User, error) {
 	user, err := as.usersRepository.GetByEmail(req.Email)
 	if err != nil {
@@ -74,6 +78,7 @@ func (as *authService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.U
 	return user.ToProtoBuffer(), nil
 }
 
+// GetUser takes a GetUserRequest and retrieves and returns the user.
 func (as *authService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.User, error) {
 	user, err := as.usersRepository.GetById(req.Id)
 	if err != nil {
@@ -82,6 +87,7 @@ func (as *authService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb
 	return user.ToProtoBuffer(), nil
 }
 
+// ListUsers retrieves and returns all users.
 func (as *authService) ListUsers(req *pb.ListUsersRequest, stream pb.AuthService_ListUsersServer) error {
 	users, err := as.usersRepository.GetAll()
 	if err != nil {
@@ -97,6 +103,8 @@ func (as *authService) ListUsers(req *pb.ListUsersRequest, stream pb.AuthService
 	return nil
 }
 
+// UpdateUser takes a pb.User, validates the details and calls the repositories
+// Update method.
 func (as *authService) UpdateUser(ctx context.Context, req *pb.User) (*pb.User, error) {
 	// Verify user exists
 	user, err := as.usersRepository.GetById(req.Id)
@@ -132,6 +140,7 @@ func (as *authService) UpdateUser(ctx context.Context, req *pb.User) (*pb.User, 
 
 }
 
+// DeleteUser takes a pb.GetUserRequest and calls the repositories Delete method.
 func (as *authService) DeleteUser(ctx context.Context, req *pb.GetUserRequest) (*pb.DeleteUserResponse, error) {
 	err := as.usersRepository.Delete(req.Id)
 	if err != nil {

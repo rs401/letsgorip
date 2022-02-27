@@ -1,3 +1,4 @@
+// Package db provides access to the database.
 package db
 
 import (
@@ -7,6 +8,7 @@ import (
 	"strconv"
 )
 
+// Config interface defines the methods of the db Config.
 type Config interface {
 	ConnStr() string
 	DbName() string
@@ -21,6 +23,7 @@ type config struct {
 	connStr string
 }
 
+// NewConfig constructs and returns a new db Config.
 func NewConfig() Config {
 	var cfg config
 	var err error
@@ -37,9 +40,12 @@ func NewConfig() Config {
 	return &cfg
 }
 
+// ConnStr returns the corresponding connection string.
 func (c *config) ConnStr() string {
 	return c.connStr
 }
+
+// DbName returns the corresponding database name.
 func (c *config) DbName() string {
 	return c.dbName
 }

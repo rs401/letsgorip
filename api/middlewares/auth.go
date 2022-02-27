@@ -8,6 +8,7 @@ import (
 	"github.com/rs401/letsgorip/api/tokenutils"
 )
 
+// AuthMiddleware is a middleware to verify the user is authenticated.
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {

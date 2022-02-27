@@ -1,3 +1,4 @@
+// Package models provides the data models for the auth service
 package models
 
 import (
@@ -17,6 +18,7 @@ type User struct {
 	UpdatedAt time.Time `json:"updatedAt" gorm:"autoUpdateTime"`
 }
 
+// ToProtoBuffer returns a protocol buffers version of the User.
 func (u *User) ToProtoBuffer() *pb.User {
 	return &pb.User{
 		Id:        uint64(u.ID),
@@ -29,6 +31,7 @@ func (u *User) ToProtoBuffer() *pb.User {
 	}
 }
 
+// FromProtoBuffer takes a pb user and 'loads' the current user with the details
 func (u *User) FromProtoBuffer(user *pb.User) {
 	u.ID = user.GetId()
 	u.Name = user.GetName()

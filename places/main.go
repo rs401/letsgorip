@@ -1,3 +1,4 @@
+// Package places provides the Places API
 package main
 
 import (
