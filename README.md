@@ -21,6 +21,7 @@
 
 [![Build][actions-build-shield]][actions-build-url]
 [![Tests][actions-tests-shield]][actions-tests-url]
+[![Go Report Card](https://goreportcard.com/badge/github.com/rs401/letsgorip)](https://goreportcard.com/report/github.com/rs401/letsgorip)
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![BSD 3-Clause License][license-shield]][license-url]
