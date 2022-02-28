@@ -1,0 +1,9 @@
+.btn-new {
+    color: #efefef;
+    background-color: #395159;
+    border-color: #23303d;
+}
+
+.btn-new:hover {
+    filter: brightness(1.4);
+}

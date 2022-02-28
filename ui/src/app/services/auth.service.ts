@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { SignIn, User } from '../models/user';
-import { BehaviorSubject, catchError, map, Observable, pipe, tap } from 'rxjs';
+import { User } from '../models/user';
+import { BehaviorSubject, catchError, Observable,  tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -26,11 +26,12 @@ export class AuthService {
     return this.http.post(
       `${this.ROOT_URL}/api/signin/`,
       { email: email, password: password },
-      {observe: "response"}
+      {observe: 'response', responseType: 'json'}
       )
       .pipe(
-        map((data) => {
+        tap((data) => {
           let user: User = data.body as User;
+          this.token = String(data.headers.get('Authorization'));
           localStorage.setItem('lgrToken', data.headers.get('Authorization') || '');
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.userSubject.next(user);
@@ -46,8 +47,9 @@ export class AuthService {
       {observe: "response"}
     )
       .pipe(
-        map((data) => {
+        tap((data) => {
           let user: User = data.body as User;
+          this.token = String(data.headers.get('Authorization'));
           localStorage.setItem('lgrToken', data.headers.get('Authorization') || '');
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.userSubject.next(user);

@@ -28,7 +28,6 @@ export class SignInComponent implements OnInit {
     if(email && password) {
       this.auth.signin(email, password).subscribe({
         next: (res) => {
-          console.log('response: ' + res);
           this.router.navigateByUrl('/');
         },
         error: (err) => {this.showFlashMessage(err.error.error)},

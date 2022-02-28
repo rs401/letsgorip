@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -61,10 +61,14 @@ export class ForumService {
     );
   }
 
-  createThread(thread: Thread) {
+  createThread(token: string, thread: Thread) {
     return this.http.post<Thread>(
       `${this.ROOT_URL}/api/forum/${thread.forum_id}/thread/`,
       JSON.stringify(thread),
+      { headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization: token,
+      }) },
     );
   }
 

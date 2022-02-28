@@ -1,0 +1,22 @@
+<div class="form-group">
+  <app-flash-message [message]="newThreadMessage"></app-flash-message>
+    <div *ngIf="currentUser?.id === undefined">not auth'd</div>
+  <div class="form-grouop mb-2">
+    <label>Title:</label>
+    <input
+      type="text"
+      placeholder="Thread Title"
+      class="form-control"
+      [formControl]="titleControl"
+    />
+  </div>
+  <div class="form-group mb-2">
+    <label>Message:</label>
+    <textarea
+      placeholder="Thread Message"
+      class="form-control"
+      [formControl]="msgControl"
+    ></textarea>
+  </div>
+  <button class="btn btn-new" (click)="createThread()">Create Post</button>
+</div>
