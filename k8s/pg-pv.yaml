@@ -1,36 +1,38 @@
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: lgr-pg-pv-volume
-  labels:
-    type: local
-spec:
-  capacity:
-    storage: 1Gi
-  volumeMode: Filesystem
-  accessModes:
-    - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Delete
-  # storageClassName: local-storage
-  local:
-    path: "/tmp/data"
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - lgr-postgres
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: lgr-pg-pv-data
-spec:
-  # storageClassName: ""
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: lgr-pg-pv-volume
+#   # labels:
+#   #   type: hostPath
+# spec:
+#   capacity:
+#     storage: 1Gi
+#   accessModes:
+#     - ReadWriteOnce
+#   hostPath:
+#     path: /mnt/minikube-data
+#   # volumeMode: Filesystem
+#   # persistentVolumeReclaimPolicy: Delete
+#   # storageClassName: local-storage
+#   # local:
+#   #   path: "/tmp/data"
+#   # nodeAffinity:
+#   #   required:
+#   #     nodeSelectorTerms:
+#   #     - matchExpressions:
+#   #       - key: kubernetes.io/hostname
+#   #         operator: In
+#   #         values:
+#   #         - lgr-postgres
+# ---
+# apiVersion: v1
+# kind: PersistentVolumeClaim
+# metadata:
+#   name: lgr-pg-pv-data
+# spec:
+#   # storageClassName: ""
+#   accessModes:
+#     - ReadWriteOnce
+#   resources:
+#     requests:
+#       storage: 1Gi

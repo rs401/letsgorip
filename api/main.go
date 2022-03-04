@@ -91,7 +91,21 @@ func main() {
 	middlewares.SetupMiddleWares(router)
 	// Listen
 	log.Printf("Listening on port :%d\n", apiPort)
-	corz := cors.AllowAll().Handler(router)
+	// Going to try and fix this with credentials
+	// corz := cors.AllowAll().Handler(router)
+	corz := cors.New(cors.Options{
+		AllowedOrigins: []string{"*"},
+		// AllowedOrigins: []string{"http://localhost:4200"},
+		AllowedMethods: []string{
+			http.MethodGet,
+			http.MethodPost,
+			http.MethodPut,
+			http.MethodDelete,
+		},
+		AllowedHeaders:   []string{"*"},
+		AllowCredentials: true,
+	}).Handler(router)
+	// err = http.ListenAndServeTLS(fmt.Sprintf(":%d", apiPort), "./localhost.crt", "./localhost.key", corz)
 	err = http.ListenAndServe(fmt.Sprintf(":%d", apiPort), corz)
 	if err != nil {
 		log.Fatalf("Error: %v\n", err)

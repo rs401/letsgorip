@@ -17,7 +17,7 @@ build-forums: ## build the Forum service
 build-places: ## build the Place service
 	@go build -o places/placesvc places/main.go
 
-build-docker: build-api-docker build-auth-docker build-forums-docker build-places-docker ## Build both docker images
+build-docker: build-api-docker build-auth-docker build-forums-docker build-places-docker build-ui-docker ## Build all docker images
 
 build-api-docker: ## build the API docker image
 	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/api/api api/main.go
@@ -38,6 +38,9 @@ build-places-docker: ## build the Place service docker image
 	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/places/placesvc places/main.go
 	@docker build -t rs401/letsgoripplacesvc:latest docker/places
 	@rm docker/places/placesvc
+
+build-ui-docker: ## build the ui docker image
+	@docker build -t rs401/letsgoripui:latest ui/
 
 kube: ## Run kubectl apply on kubernetes config directory
 	@kubectl apply -f k8s/

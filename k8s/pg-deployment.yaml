@@ -31,10 +31,12 @@ spec:
               secretKeyRef:
                 name: pg-secrets
                 key: db_pass
-        volumeMounts:
-          - mountPath: /var/lib/postgresql/data
-            name: lgr-pg-storage
-      volumes:
-      - name: lgr-pg-storage
-        persistentVolumeClaim:
-          claimName: lgr-pg-pv-data
+      #   volumeMounts:
+      #     - mountPath: /var/lib/postgresql/data
+      #       name: lgr-pg-storage
+      # volumes:
+      # - name: lgr-pg-storage
+      #   hostPath:
+      #     path: /mnt/minikube-data
+        # persistentVolumeClaim:
+        #   claimName: lgr-pg-pv-data

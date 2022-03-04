@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: lgr-api-config
 data:
-  api_port: "9000"
+  api_port: "80"
   authsvc_host: "lgr-authsvc"
   authsvc_port: "9001"
   forumsvc_host: "lgr-forumsvc"

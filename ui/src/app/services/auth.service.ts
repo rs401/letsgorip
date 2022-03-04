@@ -26,7 +26,7 @@ export class AuthService {
     return this.http.post(
       `${this.ROOT_URL}/api/signin/`,
       { email: email, password: password },
-      {observe: 'response', responseType: 'json'}
+      {observe: 'response', responseType: 'json', withCredentials: true}
       )
       .pipe(
         tap((data) => {
@@ -44,7 +44,7 @@ export class AuthService {
     return this.http.post(
       `${this.ROOT_URL}/api/signup/`,
       { name:name, email:email, password:password },
-      {observe: "response"}
+      {observe: "response", withCredentials: true}
     )
       .pipe(
         tap((data) => {
@@ -53,8 +53,7 @@ export class AuthService {
           localStorage.setItem('lgrToken', data.headers.get('Authorization') || '');
           localStorage.setItem('currentUser', JSON.stringify(user));
           this.userSubject.next(user);
-        }),
-        catchError((err) => {return err;})
+        })
       );
   }
 

@@ -24,7 +24,7 @@ spec:
             memory: 256Mi
             cpu: "0.2"
         ports:
-          - containerPort: 9000
+          - containerPort: 80
         env:
           - name: API_PORT
             valueFrom:

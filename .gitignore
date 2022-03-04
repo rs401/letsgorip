@@ -7,6 +7,9 @@ api
 forumsvc
 placesvc
 !api/
+certs
+localhost.key
+localhost.crt
 # pb
 notes.md
 *secrets.yaml

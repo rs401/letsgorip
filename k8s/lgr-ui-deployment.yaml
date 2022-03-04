@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lgr-ui
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: lgr-ui
+  template:
+    metadata:
+      labels:
+        app: lgr-ui
+    spec:
+      containers:
+      - name: lgr-ui
+        image: rs401/letsgoripui:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: 512Mi
+            cpu: "1"
+          requests:
+            memory: 256Mi
+            cpu: "0.2"
+        ports:
+          - containerPort: 80
