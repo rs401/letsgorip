@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lgr-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lgr-postgres
+  template:
+    metadata:
+      labels:
+        app: lgr-postgres
+    spec:
+      containers:
+      - name: lgr-postgres
+        image: postgres:alpine
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "0.05"
+          requests:
+            memory: "32Mi"
+            cpu: "0.03"
+        ports:
+          - containerPort: 5432
+        env:
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: pg-secrets
+                key: db_pass
+      #   volumeMounts:
+      #     - mountPath: /var/lib/postgresql/data
+      #       name: lgr-pg-storage
+      # volumes:
+      # - name: lgr-pg-storage
+      #   hostPath:
+      #     path: /mnt/minikube-data
+        # persistentVolumeClaim:
+        #   claimName: lgr-pg-pv-data

@@ -28,16 +28,16 @@ export class ForumService {
   }
 
   getForums() {
-    return this.http.get<Forum[]>(`${this.ROOT_URL}/api/forum/`);
+    return this.http.get<Forum[]>(`${this.ROOT_URL}/forum/`);
   }
 
   getThreads(id: number) {
-    return this.http.get<Thread[]>(`${this.ROOT_URL}/api/forum/${id}/thread/`);
+    return this.http.get<Thread[]>(`${this.ROOT_URL}/forum/${id}/thread/`);
   }
 
   getForum(id: number) {
     return this.http.get<Forum>(
-      `${this.ROOT_URL}/api/forum/${id}/`,
+      `${this.ROOT_URL}/forum/${id}/`,
       {observe: "response"}
     ).pipe(
       map((data) => {
@@ -50,7 +50,7 @@ export class ForumService {
 
   getThread(fid: number, tid: number) {
     return this.http.get<Thread>(
-      `${this.ROOT_URL}/api/forum/${fid}/thread/${tid}/`,
+      `${this.ROOT_URL}/forum/${fid}/thread/${tid}/`,
       {observe: "response"}
     ).pipe(
       map((data) => {
@@ -63,7 +63,7 @@ export class ForumService {
 
   createThread(token: string, thread: Thread) {
     return this.http.post<Thread>(
-      `${this.ROOT_URL}/api/forum/${thread.forum_id}/thread/`,
+      `${this.ROOT_URL}/forum/${thread.forum_id}/thread/`,
       JSON.stringify(thread),
       { headers: new HttpHeaders({
         'Content-Type':  'application/json',

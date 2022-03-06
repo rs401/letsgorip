@@ -18,6 +18,7 @@ build-places: ## build the Place service
 	@go build -o places/placesvc places/main.go
 
 build-docker: build-api-docker build-auth-docker build-forums-docker build-places-docker build-ui-docker ## Build all docker images
+build-gke: build-api-gke build-auth-gke build-forums-gke build-places-gke build-ui-gke ## Build all docker images for GKE
 
 build-api-docker: ## build the API docker image
 	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/api/api api/main.go
@@ -42,6 +43,30 @@ build-places-docker: ## build the Place service docker image
 build-ui-docker: ## build the ui docker image
 	@docker build -t rs401/letsgoripui:latest ui/
 
+build-api-gke: ## build the API docker image for gke
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/api/api api/main.go
+	@docker build -t us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrapi docker/api
+	@rm docker/api/api
+
+build-auth-gke: ## build the Auth service docker image for gke
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/auth/authsvc auth/main.go
+	@docker build -t us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrauthsvc docker/auth
+	@rm docker/auth/authsvc
+
+build-forums-gke: ## build the Forum service docker image for gke
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/forums/forumsvc forums/main.go
+	@docker build -t us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrforumsvc docker/forums
+	@rm docker/forums/forumsvc
+
+build-places-gke: ## build the Place service docker image for gke
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags '-s' -o docker/places/placesvc places/main.go
+	@docker build -t us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrplacesvc docker/places
+	@rm docker/places/placesvc
+
+build-ui-gke: ## build the ui docker image for gke
+	@docker build -t us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrui ui/
+
+
 kube: ## Run kubectl apply on kubernetes config directory
 	@kubectl apply -f k8s/
 
@@ -54,6 +79,14 @@ prev-readme: ## Compile readme and preview in browser
 
 proto: ## Run protoc compiler
 	@protoc -I=./messages --go_out=./pb --go_opt=paths=source_relative --go-grpc_out=./pb --go-grpc_opt=paths=source_relative ./messages/*.proto
+
+push-gke: ## Push project images to G artifacts registry
+	@docker push us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrplacesvc:latest
+	@docker push us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrforumsvc:latest
+	@docker push us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrauthsvc:latest
+	@docker push us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrapi:latest
+	@docker push us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrui:latest
+
 
 run-docker: ## Run docker commands to start docker containers
 	@docker run -d --rm --name lgrauthsvc --net test -p 9001:9001 rs401/letsgoripauthsvc

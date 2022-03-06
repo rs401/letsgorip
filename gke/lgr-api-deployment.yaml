@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lgr-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lgr-api
+  template:
+    metadata:
+      labels:
+        app: lgr-api
+    spec:
+      containers:
+      - name: lgr-api
+        image: us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrapi:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "0.05"
+          requests:
+            memory: "32Mi"
+            cpu: "0.03"
+        ports:
+          - containerPort: 80
+        env:
+          - name: API_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-api-config
+                key: api_port
+          - name: AUTHSVC_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-api-config
+                key: authsvc_host
+          - name: AUTHSVC_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-api-config
+                key: authsvc_port
+          - name: FORUMSVC_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-api-config
+                key: forumsvc_host
+          - name: FORUMSVC_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-api-config
+                key: forumsvc_port
+          - name: PLACESVC_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-api-config
+                key: placesvc_host
+          - name: PLACESVC_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-api-config
+                key: placesvc_port
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: lgr-api-secrets
+                key: jwt_secret
+          - name: REFRESH_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: lgr-api-secrets
+                key: refresh_secret

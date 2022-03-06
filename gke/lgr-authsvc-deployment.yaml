@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lgr-authsvc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lgr-authsvc
+  template:
+    metadata:
+      labels:
+        app: lgr-authsvc
+    spec:
+      containers:
+      - name: lgr-authsvc
+        image: us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrauthsvc:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "0.05"
+          requests:
+            memory: "32Mi"
+            cpu: "0.03"
+        ports:
+          - containerPort: 9001
+        env:
+          - name: DB_USER
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-authsvc-config
+                key: db_user
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: pg-secrets
+                key: db_pass
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-authsvc-config
+                key: db_host
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-authsvc-config
+                key: db_name
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-authsvc-config
+                key: db_port
+          - name: AUTHSVC_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-authsvc-config
+                key: authsvc_port

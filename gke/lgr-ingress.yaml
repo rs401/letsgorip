@@ -1,0 +1,63 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    ingress.gcp.kubernetes.io/pre-shared-cert: mcrt-cb3e5971-044e-4ad7-bb85-f09e234de4cf
+    # ingress.kubernetes.io/backends: '{"k8s-be-30556--e42ce166cacc9c9a":"HEALTHY","k8s1-e42ce166-default-lgr-api-80-a5f02c06":"HEALTHY","k8s1-e42ce166-default-lgr-ui-80-918860e6":"HEALTHY"}'
+    # ingress.kubernetes.io/forwarding-rule: k8s2-fr-jpf0vm9s-default-lgr-ingress-nyptl5jb
+    # ingress.kubernetes.io/https-forwarding-rule: k8s2-fs-jpf0vm9s-default-lgr-ingress-nyptl5jb
+    # ingress.kubernetes.io/https-target-proxy: k8s2-ts-jpf0vm9s-default-lgr-ingress-nyptl5jb
+    # ingress.kubernetes.io/ssl-cert: mcrt-cb3e5971-044e-4ad7-bb85-f09e234de4cf
+    # ingress.kubernetes.io/static-ip: k8s2-fr-jpf0vm9s-default-lgr-ingress-nyptl5jb
+    # ingress.kubernetes.io/target-proxy: k8s2-tp-jpf0vm9s-default-lgr-ingress-nyptl5jb
+    # ingress.kubernetes.io/url-map: k8s2-um-jpf0vm9s-default-lgr-ingress-nyptl5jb
+    kubernetes.io/ingress.class: gce
+    networking.gke.io/managed-certificates: lgr-managed-cert
+  # creationTimestamp: "2022-03-06T00:05:00Z"
+  finalizers:
+  - networking.gke.io/ingress-finalizer-V2
+  generation: 1
+  name: lgr-ingress
+  namespace: default
+  resourceVersion: "683770"
+  uid: 1617c710-c5b8-4ced-a176-709677699a1d
+spec:
+  rules:
+  - host: letsgo.rip
+    http:
+      paths:
+      - backend:
+          service:
+            name: lgr-ui
+            port:
+              number: 80
+        path: /ui/
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: lgr-api
+            port:
+              number: 80
+        path: /api/
+        pathType: ImplementationSpecific
+  - host: www.letsgo.rip
+    http:
+      paths:
+      - backend:
+          service:
+            name: lgr-ui
+            port:
+              number: 80
+        path: /ui/
+        pathType: ImplementationSpecific
+      - backend:
+          service:
+            name: lgr-api
+            port:
+              number: 80
+        path: /api/
+        pathType: ImplementationSpecific
+status:
+  loadBalancer:
+    ingress:
+    - ip: 35.244.165.143

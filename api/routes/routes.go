@@ -12,6 +12,10 @@ import (
 
 // SetupRoutes takes a *mux.Router and various handlers to configure *mux.Routes
 func SetupRoutes(r *mux.Router, authHandleFuncs handlers.AuthHandlers, forumHandleFuncs handlers.ForumHandlers, placeHandleFuncs handlers.PlaceHandlers) {
+	r.HandleFunc("/", func(rw http.ResponseWriter, r *http.Request) {
+		rw.WriteHeader(http.StatusOK)
+		json.NewEncoder(rw).Encode(map[string]string{"healthcheck": "healthy"})
+	})
 	r.HandleFunc("/api/", func(rw http.ResponseWriter, r *http.Request) {
 		rw.WriteHeader(http.StatusOK)
 		json.NewEncoder(rw).Encode(map[string]string{"heartbeat": "alive"})

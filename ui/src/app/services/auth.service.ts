@@ -24,7 +24,7 @@ export class AuthService {
 
   signin(email: string, password: string) {
     return this.http.post(
-      `${this.ROOT_URL}/api/signin/`,
+      `${this.ROOT_URL}/signin/`,
       { email: email, password: password },
       {observe: 'response', responseType: 'json', withCredentials: true}
       )
@@ -42,7 +42,7 @@ export class AuthService {
   signup(name: string, email: string, password: string) {
     console.log('Calling endpoint');
     return this.http.post(
-      `${this.ROOT_URL}/api/signup/`,
+      `${this.ROOT_URL}/signup/`,
       { name:name, email:email, password:password },
       {observe: "response", withCredentials: true}
     )

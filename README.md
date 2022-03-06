@@ -177,10 +177,17 @@ To run this application you will need to install the prerequisites and use the d
 - [ ] UI
     - [x] Models
     - [x] Auth components
-    - [ ] Forum components
-    - [ ] Thread components
+    - [x] Forum components
+    - [x] Thread components
     - [ ] Post components
     - [ ] Places components
+- [ ] GKE
+    - [x] Setup cluster
+    - [x] Setup artifact registry
+        - [x] Push images to registry
+    - [ ] Setup letsgo.rip domain with GKE DNS
+    - [ ] Execute kubernetes configs
+    - [ ] Setup ingress
 
 See the [open issues](https://github.com/rs401/letsgorip/issues) for a full list of proposed features (and known issues).
 

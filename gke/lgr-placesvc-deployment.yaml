@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lgr-placesvc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lgr-placesvc
+  template:
+    metadata:
+      labels:
+        app: lgr-placesvc
+    spec:
+      containers:
+      - name: lgr-placesvc
+        image: us-east1-docker.pkg.dev/letsgorip/lgr-repo/lgrplacesvc:latest
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "64Mi"
+            cpu: "0.05"
+          requests:
+            memory: "32Mi"
+            cpu: "0.03"
+        ports:
+          - containerPort: 9003
+        env:
+          - name: DB_USER
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-placesvc-config
+                key: db_user
+          - name: DB_PASS
+            valueFrom:
+              secretKeyRef:
+                name: pg-secrets
+                key: db_pass
+          - name: DB_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-placesvc-config
+                key: db_host
+          - name: DB_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-placesvc-config
+                key: db_name
+          - name: DB_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-placesvc-config
+                key: db_port
+          - name: PLACESVC_PORT
+            valueFrom:
+              configMapKeyRef:
+                name: lgr-placesvc-config
+                key: placesvc_port
