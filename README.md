@@ -37,12 +37,12 @@
 <h3 align="center">Lets Go Rip</h3>
 
   <p align="center">
-    Lets Go Rip is a project to show potential employers my capabilities. The project is written in Go(lang) and has microservices for Auth, Forums, Places and an HTTP API. I used this project to learn more about gRPC and Kubernetes. I used Angular for the front end.
+    Lets Go Rip is an application hosting a community to help like minded motorsports enthusiasts, find places to ride/drive/drift/jump/race and people to go with. 
     <br />
     <a href="https://github.com/rs401/letsgorip"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/rs401/letsgorip">View Demo</a>
+    <a href="https://letsgo.rip">View Demo</a>
     ·
     <a href="https://github.com/rs401/letsgorip/issues">Report Bug</a>
     ·
@@ -82,9 +82,10 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is a work in progress that does not yet have a live demo.
+This project is a work in progress ~~that does not yet have a live demo~~ that can be seen at [https://letsgo.rip](https://letsgo.rip).
 
-Lets Go Rip is a project to show potential employers my capabilities. The project is written in Go(lang) and has microservices for Auth, Forums, Places and an HTTP API. I used this project to learn more about gRPC and Kubernetes. I used Angular for the front end.
+Lets Go Rip is a project to show potential employers my capabilities. The project is written in Go(lang) and has microservices for Auth, Forums, Places and an HTTP API. I used this project to learn more about gRPC and Kubernetes. I used Angular for the front end. The app is currently running in a Google Kubernetes Engine (GKE) cluster. 
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -181,13 +182,16 @@ To run this application you will need to install the prerequisites and use the d
     - [x] Thread components
     - [ ] Post components
     - [ ] Places components
+        - [ ] Google maps
 - [ ] GKE
     - [x] Setup cluster
     - [x] Setup artifact registry
         - [x] Push images to registry
-    - [ ] Setup letsgo.rip domain with GKE DNS
-    - [ ] Execute kubernetes configs
-    - [ ] Setup ingress
+    - [x] Execute kubernetes configs
+    - [x] Setup letsgo.rip domain with GKE DNS
+    - [x] Setup ingress
+    - [x] Setup SSL certificates with GKE
+    - [x] Setup Persistent Volume for Postgres db
 
 See the [open issues](https://github.com/rs401/letsgorip/issues) for a full list of proposed features (and known issues).
 
