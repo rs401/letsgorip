@@ -3,6 +3,7 @@ kind: ConfigMap
 metadata:
   name: lgr-api-config
 data:
+  prod: "prod"
   api_port: "80"
   authsvc_host: "lgr-authsvc"
   authsvc_port: "9001"

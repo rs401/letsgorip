@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Forum } from '../models/forum';
+import { Post } from '../models/post';
 import { Thread } from '../models/thread';
 
 @Injectable({
@@ -35,6 +36,10 @@ export class ForumService {
     return this.http.get<Thread[]>(`${this.ROOT_URL}/forum/${id}/thread/`);
   }
 
+  getPosts(id: number, tid: number) {
+    return this.http.get<Post[]>(`${this.ROOT_URL}/forum/${id}/thread/${tid}/post/`);
+  }
+
   getForum(id: number) {
     return this.http.get<Forum>(
       `${this.ROOT_URL}/forum/${id}/`,
@@ -65,6 +70,17 @@ export class ForumService {
     return this.http.post<Thread>(
       `${this.ROOT_URL}/forum/${thread.forum_id}/thread/`,
       JSON.stringify(thread),
+      { headers: new HttpHeaders({
+        'Content-Type':  'application/json',
+        Authorization: token,
+      }) },
+    );
+  }
+
+  createPost(token: string, fid: number, post: Post) {
+    return this.http.post<Post>(
+      `${this.ROOT_URL}/forum/${fid}/thread/${post.thread_id}/post/`,
+      JSON.stringify(post),
       { headers: new HttpHeaders({
         'Content-Type':  'application/json',
         Authorization: token,

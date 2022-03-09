@@ -1,0 +1,12 @@
+.my-bg-dark {
+    background-color: #23303d;
+}
+
+.my-btn-outline-success {
+    color: white;
+    border-color: #395159;
+    border-width: 2px;
+}
+.my-btn-outline-success:hover {
+    border-color: #638d9b;
+}

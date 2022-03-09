@@ -26,17 +26,18 @@ spec:
         ports:
           - containerPort: 5432
         env:
+          - name: PGDATA
+            value: /var/lib/postgresql/data/pgdata
           - name: POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: pg-secrets
                 key: db_pass
-      #   volumeMounts:
-      #     - mountPath: /var/lib/postgresql/data
-      #       name: lgr-pg-storage
-      # volumes:
-      # - name: lgr-pg-storage
-      #   hostPath:
-      #     path: /mnt/minikube-data
-        # persistentVolumeClaim:
-        #   claimName: lgr-pg-pv-data
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: lgr-pg-storage
+      volumes:
+      - name: lgr-pg-storage
+        persistentVolumeClaim:
+          claimName: lgr-pg-pv-data
+          readOnly: false

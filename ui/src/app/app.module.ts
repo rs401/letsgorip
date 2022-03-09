@@ -2,6 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +15,10 @@ import { ForumComponent } from './components/forum/forum.component';
 import { ThreadComponent } from './components/thread/thread.component';
 import { NewThreadComponent } from './components/new-thread/new-thread.component';
 import { NewPostComponent } from './components/new-post/new-post.component';
+import { TosComponent } from './components/tos/tos.component';
+import { PrivacyComponent } from './components/privacy/privacy.component';
+import { RulesComponent } from './components/rules/rules.component';
+import { ScrollTextComponent } from './components/scroll-text/scroll-text.component';
 
 @NgModule({
   declarations: [
@@ -26,13 +31,18 @@ import { NewPostComponent } from './components/new-post/new-post.component';
     ForumComponent,
     ThreadComponent,
     NewThreadComponent,
-    NewPostComponent
+    NewPostComponent,
+    TosComponent,
+    PrivacyComponent,
+    RulesComponent,
+    ScrollTextComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,13 @@
+<p>new-post works!</p>
+<div class="form-group">
+    <app-flash-message [message]="newPostMessage"></app-flash-message>
+    <div class="form-group mb-2">
+      <label>Message:</label>
+      <textarea
+        placeholder="Reply Message"
+        class="form-control"
+        [formControl]="msgControl"
+      ></textarea>
+    </div>
+    <button class="btn btn-new" (click)="createPost()">Post Reply</button>
+  </div>

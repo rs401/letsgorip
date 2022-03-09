@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
-import { BehaviorSubject, catchError, Observable,  tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable,  tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -13,6 +13,7 @@ export class AuthService {
   public user: Observable<User>;
   public token: string;
   readonly ROOT_URL = environment.root_url;
+  cu?: User;
 
   constructor(private http: HttpClient) {
     this.userSubject = new BehaviorSubject<User>(
@@ -62,6 +63,14 @@ export class AuthService {
     localStorage.removeItem('lgrToken');
     this.token = '';
     this.userSubject.next(new User);
+  }
+
+  isLoggedIn(): boolean {
+    this.user.subscribe(user => this.cu = user);
+    if(this.cu?.id === undefined) {
+      return false;
+    }
+    return true;
   }
 
 }

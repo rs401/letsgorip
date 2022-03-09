@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { timer } from 'rxjs';
 import { Forum } from 'src/app/models/forum';
 import { ForumService } from 'src/app/services/forum.service';
 
@@ -10,12 +11,28 @@ import { ForumService } from 'src/app/services/forum.service';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
+  
 
   public forums: Forum[] = [];
-  stateForm!: FormGroup;
+  public stateForm!: FormGroup;
+  // private source = timer(1000, 3000);
+  // private trigger = this.source.subscribe(() => this.scrollText())
+  public scrollMsg: string = "";
+  public lines: string[] = [
+    "Find places to go off-road for all different vehicles.",
+    "Find people to go off-road with.",
+    "Find off-road parks.",
+    "Find off-road events.",
+    "Find a mud hole to lose your super-swampers in.",
+    "Find a dune for your buggy.",
+    "Find a parking lot to do donuts in",
+  ];
 
-  constructor(private forumService: ForumService, private fb:FormBuilder, private router: Router) {
-    
+  constructor(
+    private forumService: ForumService,
+    private fb: FormBuilder,
+    private router: Router) {
+
   }
 
   ngOnInit(): void {
@@ -25,8 +42,8 @@ export class MainComponent implements OnInit {
           this.forums.push(forum);
         });
       },
-      error: (err) => {console.log('Error: ' + err);},
-      complete: () => {console.log('MainComponent: Completed GET Forums');},
+      error: (err) => { console.log('Error: ' + err); },
+      complete: () => { console.log('MainComponent: Completed GET Forums'); },
     });
     this.stateForm = this.fb.group({
       state: [0]
@@ -37,5 +54,11 @@ export class MainComponent implements OnInit {
     console.log(this.stateForm.value)
     this.router.navigateByUrl('/forum/' + this.stateForm.value.state)
   }
+
+  // scrollText(): void {
+  //   let rand = Math.floor(Math.random() * this.lines.length);
+  //   console.log('rand: ' + rand);
+  //   this.scrollMsg = this.lines[rand];
+  // }
 
 }

@@ -5,21 +5,28 @@ import { ForumComponent } from './components/forum/forum.component';
 import { MainComponent } from './components/main/main.component';
 import { NewPostComponent } from './components/new-post/new-post.component';
 import { NewThreadComponent } from './components/new-thread/new-thread.component';
+import { PrivacyComponent } from './components/privacy/privacy.component';
+import { RulesComponent } from './components/rules/rules.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { ThreadComponent } from './components/thread/thread.component';
+import { TosComponent } from './components/tos/tos.component';
+import { AuthGuardGuard } from './services/auth-guard.guard';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
+  { path: 'tos', component: TosComponent },
+  { path: 'privacy', component: PrivacyComponent },
+  { path: 'rules', component: RulesComponent },
   { 
     path: 'forum',
     children: [
       { path: ':id', component: ForumComponent },
-      { path: ':id/new', component: NewThreadComponent },
+      { path: ':id/new', component: NewThreadComponent, canActivate: [AuthGuardGuard] },
       { path: ':id/:tid', component: ThreadComponent },
-      { path: ':id/:tid/new', component: NewPostComponent }
+      { path: ':id/:tid/new', component: NewPostComponent, canActivate: [AuthGuardGuard] }
     ],
   },
 ];

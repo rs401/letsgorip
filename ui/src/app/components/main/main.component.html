@@ -1,11 +1,22 @@
 <div>
-    <h3>Choose your Off-Road state</h3>
-    <form [formGroup]="stateForm" >
-    <select class="form-select w-auto" (change)="update()" formControlName="state">
-        <option  [ngValue]="0" selected disabled>Please choose a State</option>
-        <option *ngFor="let forum of forums" [ngValue]="forum.id" >
-            {{forum.title}}
-        </option>
-    </select>
-    </form>
+  <div class="p-5 mt-2 mb-4 text-white my-bg-dark rounded-3">
+    <div class="container-fluid py-3">
+      <h1 class="display-5 fw-bold">Lets Go Rip!</h1>
+      <app-scroll-text [lines]="lines"></app-scroll-text>
+      <hr />
+      <h3>Choose your Off-Road state</h3>
+      <form [formGroup]="stateForm">
+        <select
+          class="form-select w-auto"
+          (change)="update()"
+          formControlName="state"
+        >
+          <option [ngValue]="0" selected disabled>Please choose a State</option>
+          <option *ngFor="let forum of forums" [ngValue]="forum.id">
+            {{ forum.title }}
+          </option>
+        </select>
+      </form>
+    </div>
+  </div>
 </div>

@@ -1,5 +1,4 @@
-<p>thread works!</p>
-<div class="row">
+<div class="row border mt-2 mb-2 p-3">
     <div class="col-2">
         User: {{ thread?.user_id }}
     </div>
@@ -11,6 +10,6 @@
     </div>
 </div>
 <button routerLink="new" class="btn btn-sm btn-new">+ Post Reply</button>
-<div class="row" *ngFor="let post of posts">
-    reply post
+<div class="row rounded border p-3" *ngFor="let post of posts; even as isEven" [class]="isEven ? 'even' : 'odd'">
+    {{post.msg}}
 </div>

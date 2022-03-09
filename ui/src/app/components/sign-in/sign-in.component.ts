@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
@@ -13,13 +13,16 @@ export class SignInComponent implements OnInit {
   emailControl: FormControl = new FormControl('');
   passwordControl: FormControl = new FormControl('');
   signInMessage: string = '';
+  returnURL!: string;
 
   constructor(
     private auth: AuthService,
+    private route: ActivatedRoute,
     private router: Router,
     ) { }
 
   ngOnInit(): void {
+    this.returnURL = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   signin(){
@@ -28,7 +31,7 @@ export class SignInComponent implements OnInit {
     if(email && password) {
       this.auth.signin(email, password).subscribe({
         next: (res) => {
-          this.router.navigateByUrl('/');
+          this.router.navigateByUrl(this.returnURL);
         },
         error: (err) => {this.showFlashMessage(err.error.error)},
         complete: () => console.info('complete')

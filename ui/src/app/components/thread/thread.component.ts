@@ -28,6 +28,15 @@ export class ThreadComponent implements OnInit {
       next: (res) => {console.log('threadComponent: response: ' + res);},
       error: (e) => {console.log('threadComponent: error: ' + JSON.stringify(e));},
     });
+
+    this.forumService.getPosts(this.fid, this.tid).subscribe({
+      next: (res) => {
+        res.forEach((post) => {
+          this.posts.push(post);
+        });
+      },
+      error: (e) => {console.log('Error: ' + e);},
+    });
   }
 
 }

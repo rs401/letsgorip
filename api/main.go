@@ -20,6 +20,8 @@ import (
 )
 
 var (
+	prod         string
+	origins      []string
 	authSvcHost  string
 	forumSvcHost string
 	placeSvcHost string
@@ -53,9 +55,16 @@ func init() {
 	if err != nil {
 		log.Fatalf("Error converting API_PORT to int")
 	}
+	prod = os.Getenv("PROD")
+
 }
 
 func main() {
+	if prod == "" {
+		origins = []string{"http://localhost:4200"}
+	} else {
+		origins = []string{"http://letsgo.rip", "https://letsgo.rip"}
+	}
 	// Client dial server
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -91,11 +100,10 @@ func main() {
 	middlewares.SetupMiddleWares(router)
 	// Listen
 	log.Printf("Listening on port :%d\n", apiPort)
-	// Going to try and fix this with credentials
+
 	// corz := cors.AllowAll().Handler(router)
 	corz := cors.New(cors.Options{
-		AllowedOrigins: []string{"*"},
-		// AllowedOrigins: []string{"http://localhost:4200"},
+		AllowedOrigins: origins,
 		AllowedMethods: []string{
 			http.MethodGet,
 			http.MethodPost,
