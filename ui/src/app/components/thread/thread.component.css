@@ -28,3 +28,7 @@
 .btn-new:hover {
     filter: brightness(1.4);
 }
+
+.post {
+    white-space:pre-wrap;
+}

@@ -10,6 +10,6 @@
     </div>
 </div>
 <button routerLink="new" class="btn btn-sm btn-new">+ Post Reply</button>
-<div class="row rounded border p-3" *ngFor="let post of posts; even as isEven" [class]="isEven ? 'even' : 'odd'">
+<div class="row rounded border p-3" *ngFor="let post of posts; even as isEven" [class]="isEven ? 'even post' : 'odd post'">
     {{post.msg}}
 </div>
