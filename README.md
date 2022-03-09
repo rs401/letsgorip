@@ -42,7 +42,7 @@
     <a href="https://github.com/rs401/letsgorip"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://letsgo.rip">View Demo</a>
+    <a href="https://www.letsgo.rip">View Demo</a>
     ·
     <a href="https://github.com/rs401/letsgorip/issues">Report Bug</a>
     ·
@@ -82,7 +82,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-This project is a work in progress ~~that does not yet have a live demo~~ that can be seen at [https://letsgo.rip](https://letsgo.rip).
+This project is a work in progress ~~that does not yet have a live demo~~ that can be seen at [https://www.letsgo.rip](https://www.letsgo.rip).
 
 Lets Go Rip is a project to show potential employers my capabilities. The project is written in Go(lang) and has microservices for Auth, Forums, Places and an HTTP API. I used this project to learn more about gRPC and Kubernetes. I used Angular for the front end. The app is currently running in a Google Kubernetes Engine (GKE) cluster. 
 
