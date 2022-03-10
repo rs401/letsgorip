@@ -1,6 +1,8 @@
 <div class="row border mt-2 mb-2 p-3">
     <div class="col-2">
-        User: {{ thread?.user_id }}
+        <section *ngIf="threadObs | async">
+            <app-user-card [uid]="thread?.user_id"></app-user-card>
+        </section>
     </div>
     <div class="col">
         <h2 class="h4">
@@ -10,6 +12,11 @@
     </div>
 </div>
 <button routerLink="new" class="btn btn-sm btn-new">+ Post Reply</button>
-<div class="row rounded border p-3" *ngFor="let post of posts; even as isEven" [class]="isEven ? 'even post' : 'odd post'">
-    {{post.msg}}
+<div class="row rounded-3 border py-3" *ngFor="let post of posts; even as isEven" [class]="isEven ? 'even post' : 'odd post'">
+    <div class="col-1 border-end">
+        <app-user-card [uid]="post.user_id"></app-user-card>
+    </div>
+    <div class="col ps-4 pb-2">
+        {{post.msg}}
+    </div>
 </div>

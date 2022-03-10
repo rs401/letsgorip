@@ -13,10 +13,12 @@ import { ForumService } from 'src/app/services/forum.service';
 export class ThreadComponent implements OnInit {
   public fid: number = 0;
   public tid: number = 0;
+  public threadObs: Observable<Thread>;
   public thread?: Thread;
   public posts: Post[] = [];
 
   constructor(private route: ActivatedRoute, private forumService: ForumService) {
+    this.threadObs = this.forumService.thread;
     this.forumService.thread.subscribe(t => this.thread = t);
   }
 

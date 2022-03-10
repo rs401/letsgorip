@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../models/user';
-import { BehaviorSubject, catchError, map, Observable,  tap } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -27,25 +27,7 @@ export class AuthService {
     return this.http.post(
       `${this.ROOT_URL}/signin/`,
       { email: email, password: password },
-      {observe: 'response', responseType: 'json', withCredentials: true}
-      )
-      .pipe(
-        tap((data) => {
-          let user: User = data.body as User;
-          this.token = String(data.headers.get('Authorization'));
-          localStorage.setItem('lgrToken', data.headers.get('Authorization') || '');
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.userSubject.next(user);
-        })
-      );
-  }
-
-  signup(name: string, email: string, password: string) {
-    console.log('Calling endpoint');
-    return this.http.post(
-      `${this.ROOT_URL}/signup/`,
-      { name:name, email:email, password:password },
-      {observe: "response", withCredentials: true}
+      { observe: 'response', responseType: 'json', withCredentials: true }
     )
       .pipe(
         tap((data) => {
@@ -58,6 +40,22 @@ export class AuthService {
       );
   }
 
+  signup(name: string, email: string, password: string) {
+    return this.http.post(
+      `${this.ROOT_URL}/signup/`,
+      { name: name, email: email, password: password },
+      { observe: "response", withCredentials: true }
+    ).pipe(
+      tap((data) => {
+        let user: User = data.body as User;
+        this.token = String(data.headers.get('Authorization'));
+        localStorage.setItem('lgrToken', data.headers.get('Authorization') || '');
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        this.userSubject.next(user);
+      })
+    );
+  }
+
   signout() {
     localStorage.removeItem('currentUser');
     localStorage.removeItem('lgrToken');
@@ -67,10 +65,27 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     this.user.subscribe(user => this.cu = user);
-    if(this.cu?.id === undefined) {
+    if (this.cu?.id === undefined) {
       return false;
     }
     return true;
+  }
+
+  getUser(id: number): Observable<User> {
+    // let tmpUser: User = new User;
+    return this.http.get<User>(
+      `${this.ROOT_URL}/user/${id}/`,
+      { observe: "body", withCredentials: true }
+    );
+    // .pipe(
+    //   tap((data) => {
+    //     let user: User = data.body as User;
+    //     tmpUser.id = user.id;
+    //     tmpUser.name = user.name;
+    //     tmpUser.createdAt = user.createdAt;
+    //   })
+    // );
+    // return tmpUser;
   }
 
 }

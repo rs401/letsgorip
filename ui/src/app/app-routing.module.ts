@@ -5,6 +5,7 @@ import { ForumComponent } from './components/forum/forum.component';
 import { MainComponent } from './components/main/main.component';
 import { NewPostComponent } from './components/new-post/new-post.component';
 import { NewThreadComponent } from './components/new-thread/new-thread.component';
+import { PlacesComponent } from './components/places/places.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { RulesComponent } from './components/rules/rules.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'tos', component: TosComponent },
   { path: 'privacy', component: PrivacyComponent },
   { path: 'rules', component: RulesComponent },
+  { path: 'places', component: PlacesComponent },
   { 
     path: 'forum',
     children: [

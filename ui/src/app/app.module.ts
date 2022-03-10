@@ -19,6 +19,9 @@ import { TosComponent } from './components/tos/tos.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { RulesComponent } from './components/rules/rules.component';
 import { ScrollTextComponent } from './components/scroll-text/scroll-text.component';
+import { UserCardComponent } from './components/user-card/user-card.component';
+import { PlacesComponent } from './components/places/places.component';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,9 @@ import { ScrollTextComponent } from './components/scroll-text/scroll-text.compon
     TosComponent,
     PrivacyComponent,
     RulesComponent,
-    ScrollTextComponent
+    ScrollTextComponent,
+    UserCardComponent,
+    PlacesComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +49,7 @@ import { ScrollTextComponent } from './components/scroll-text/scroll-text.compon
     HttpClientModule,
     BrowserAnimationsModule,
   ],
-  providers: [],
+  providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
