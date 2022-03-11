@@ -22,6 +22,7 @@ import { ScrollTextComponent } from './components/scroll-text/scroll-text.compon
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { PlacesComponent } from './components/places/places.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { HashLocationStrategy, LocationStrategy } from '@angular/common';
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    GoogleMapsModule,
   ],
   providers: [{ provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]

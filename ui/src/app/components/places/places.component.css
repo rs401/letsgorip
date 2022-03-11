@@ -1,0 +1,25 @@
+.expand {
+  height: 100%;
+  width: 100%;
+}
+
+.markerForm {
+    background-color: white;
+    padding: 2em;
+    width: 40vw;
+  position: fixed;
+  overflow: hidden;
+  z-index: 2400;
+  left: 25vw;
+  top: 25vh !important;
+}
+
+/* .map {
+    position:absolute;
+    top:64px;
+    width:1100px;
+    height:735px;
+    overflow:hidden;
+    border:1px solid rgb(211,211,211);
+    border-radius:3px;
+} */

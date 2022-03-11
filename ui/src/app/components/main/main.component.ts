@@ -55,10 +55,5 @@ export class MainComponent implements OnInit {
     this.router.navigateByUrl('/forum/' + this.stateForm.value.state)
   }
 
-  // scrollText(): void {
-  //   let rand = Math.floor(Math.random() * this.lines.length);
-  //   console.log('rand: ' + rand);
-  //   this.scrollMsg = this.lines[rand];
-  // }
 
 }
