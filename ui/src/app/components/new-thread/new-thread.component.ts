@@ -15,7 +15,7 @@ export class NewThreadComponent implements OnInit {
 
   public fid: number = 0;
   public currentUser?: User;
-  public token: string = '';
+  // public token: string = '';
   public thread: Thread = new Thread;
   titleControl: FormControl = new FormControl('');
   msgControl: FormControl = new FormControl('');
