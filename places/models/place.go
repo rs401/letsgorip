@@ -7,7 +7,7 @@ import "github.com/rs401/letsgorip/pb"
 type Place struct {
 	Id          uint64  `json:"id" gorm:"primaryKey"`
 	UserId      uint64  `json:"user_id" gorm:"not null"`
-	Name        string  `json:"name" gorm:"<-;unique;not null"`
+	Name        string  `json:"name" gorm:"not null"`
 	Description string  `json:"description" gorm:"not null"`
 	Latitude    float64 `json:"latitude" gorm:"not null"`
 	Longitude   float64 `json:"longitude" gorm:"not null"`
