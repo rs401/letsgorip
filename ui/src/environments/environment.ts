@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  root_url: 'http://localhost:9000/api'
+  root_url: 'http://localhost:9000/api',
+  map_api_key: ''
 };
 
 /*
