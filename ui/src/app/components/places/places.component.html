@@ -1,6 +1,6 @@
 <div>
-  <div class="row py-2">
-    <form class="col-9" [formGroup]="stateForm">
+  <div class="row row-cols-auto py-2">
+    <form class="col" [formGroup]="stateForm">
       <select
         class="form-select w-auto"
         (change)="update()"
@@ -24,6 +24,7 @@
       [center]="center"
       [options]="options"
       (mapRightclick)="addMarker($event)"
+      (zoomChanged)="zoomChange()"
     >
         <map-marker #mapmarker="mapMarker"
             *ngFor="let marker of markers"
@@ -38,13 +39,13 @@
   </div>
   <!-- Overlay form -->
   <div *ngIf="addingPlace" class="markerForm form-group">
-      <!-- Here I'm going to check if currentUser != undefined; then show the form -->
+      <!-- Check if current User authenticated; then show the form -->
       <div *ngIf="authenticated; else elseBlock">
           <form [formGroup]="newPlaceForm">
             <label for="lat">Lat: </label>
-            <input class="form-control" id="lat" type="text" [formControl]="lat" >
+            <input readonly class="form-control" id="lat" type="text" [formControl]="lat" >
             <label for="lng">Lng: </label>
-            <input class="form-control" id="lng" type="text" [formControl]="lng" >
+            <input readonly class="form-control" id="lng" type="text" [formControl]="lng" >
             <label for="name">Name: </label>
             <input class="form-control" id="name" type="text" [formControl]="name">
           

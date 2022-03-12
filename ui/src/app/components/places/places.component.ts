@@ -6,6 +6,7 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { Place } from 'src/app/models/place';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { PlaceService } from 'src/app/services/place.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -89,7 +90,8 @@ export class PlacesComponent implements OnInit {
   options: google.maps.MapOptions = {
     mapTypeId: 'roadmap',
     zoomControl: true,
-    scrollwheel: true,
+    // scrollwheel: false,
+    gestureHandling: 'cooperative',
     disableDoubleClickZoom: true,
     maxZoom: 15,
     minZoom: 2,
@@ -100,7 +102,7 @@ export class PlacesComponent implements OnInit {
   @ViewChild(GoogleMap) map!: GoogleMap;
   @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {
+  constructor(private fb: FormBuilder, private auth: AuthService, private placeService: PlaceService) {
     this.auth.user.subscribe( user => this.currentUser = user);
     this.center = {
       lat: 39.8097343,
@@ -113,6 +115,25 @@ export class PlacesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadMap();
+    this.placeService.getPlaces().subscribe({
+      next: (res) => {
+        res.forEach((place) => {
+          this.places.push(place);
+          let marker: Marker = {
+            options: {
+              title: place.name
+            },
+            position: {
+              lat: place.latitude!,
+              lng: place.longitude!
+            },
+            name: place.name!,
+            description: place.description!
+          };
+          this.markers.push(marker);
+        });
+      },
+    });
   }
 
   loadMap() {
@@ -138,6 +159,10 @@ export class PlacesComponent implements OnInit {
     this.zoom = 8;
   }
 
+  zoomChange() {
+    this.zoom = this.map.getZoom()!;
+  }
+
   addMarker(event: google.maps.MapMouseEvent) {
     this.addingPlace = true;
     this.lat.setValue(event.latLng?.lat());
@@ -154,6 +179,16 @@ export class PlacesComponent implements OnInit {
       longitude: this.lng.value
     };
     this.places.push(place);
+    this.placeService.createPlace(this.auth.token, place).subscribe({
+      next: () => {
+        this.cancelCreatePlace();
+        return;
+      },
+      error: (err: any) => {
+        this.cancelCreatePlace();
+        console.log('Error creating place: ' + err);
+      }
+    });
     // For now just going to add places to local array as markers.
     let marker: Marker = {
       options: {
@@ -169,6 +204,7 @@ export class PlacesComponent implements OnInit {
 
     this.markers.push(marker);
     this.cancelCreatePlace();
+    console.log('new Place: ' + JSON.stringify(place));
   }
 
   cancelCreatePlace() {

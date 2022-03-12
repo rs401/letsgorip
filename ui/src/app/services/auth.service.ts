@@ -77,15 +77,6 @@ export class AuthService {
       `${this.ROOT_URL}/user/${id}/`,
       { observe: "body", withCredentials: true }
     );
-    // .pipe(
-    //   tap((data) => {
-    //     let user: User = data.body as User;
-    //     tmpUser.id = user.id;
-    //     tmpUser.name = user.name;
-    //     tmpUser.createdAt = user.createdAt;
-    //   })
-    // );
-    // return tmpUser;
   }
 
 }
