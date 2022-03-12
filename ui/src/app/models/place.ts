@@ -1,12 +1,12 @@
 export class Place {
-  Id?: number;
-  UserId?: number;
-  Name?: string;
-  Description?: string;
-  Latitude?: number;
-  Longitude?: number;
-  CreatedAt?: Date;
-  UpdatedAt?: Date;
+  id?: number;
+  user_id?: number;
+  name?: string;
+  description?: string;
+  latitude?: number;
+  longitude?: number;
+  created_at?: Date;
+  updated_at?: Date;
 
   constructor() {}
 }

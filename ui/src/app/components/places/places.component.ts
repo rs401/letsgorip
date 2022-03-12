@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { GoogleMap } from '@angular/google-maps';
+import { GoogleMap, MapInfoWindow, MapMarker } from '@angular/google-maps';
 import { catchError, map, Observable, of } from 'rxjs';
+import { Place } from 'src/app/models/place';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-places',
@@ -12,6 +14,7 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./places.component.css']
 })
 export class PlacesComponent implements OnInit {
+  readonly MAP_API_KEY = environment.map_api_key;
 
   currentUser?: User;
   states: string[] = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
@@ -79,6 +82,7 @@ export class PlacesComponent implements OnInit {
   addingPlace: boolean = false;
   authenticated: boolean = this.auth.isLoggedIn();
   markers: Marker[] = [];
+  places: Place[] = [];
 
   zoom: number = 4;
   center: google.maps.LatLngLiteral;
@@ -94,8 +98,10 @@ export class PlacesComponent implements OnInit {
   iwContent: string = '';
 
   @ViewChild(GoogleMap) map!: GoogleMap;
+  @ViewChild(MapInfoWindow) infoWindow!: MapInfoWindow;
 
   constructor(private fb: FormBuilder, private auth: AuthService) {
+    this.auth.user.subscribe( user => this.currentUser = user);
     this.center = {
       lat: 39.8097343,
       lng: -98.5556199,
@@ -118,7 +124,7 @@ export class PlacesComponent implements OnInit {
     this.mapLoading = true;    
     const mapsScript = document.createElement('script')
     mapsScript.setAttribute('async', '');
-    mapsScript.src = 'https://maps.googleapis.com/maps/api/js?key=***REMOVED***';
+    mapsScript.src = `https://maps.googleapis.com/maps/api/js?key=${this.MAP_API_KEY}`;
     mapsScript.addEventListener('load', () => {
       this.mapLoaded = true;
       this.mapLoading = false;
@@ -140,15 +146,25 @@ export class PlacesComponent implements OnInit {
 
   createPlace() {
     // Need to create placeService to create and get places
+    let place: Place = {
+      user_id: this.currentUser?.id,
+      name: this.name.value,
+      description: this.description.value,
+      latitude: this.lat.value,
+      longitude: this.lng.value
+    };
+    this.places.push(place);
     // For now just going to add places to local array as markers.
     let marker: Marker = {
       options: {
-        title: this.name.value
+        title: place.name
       },
       position: {
-        lat: this.lat.value,
-        lng: this.lng.value
+        lat: place.latitude!,
+        lng: place.longitude!
       },
+      name: place.name!,
+      description: place.description!
     };
 
     this.markers.push(marker);
@@ -161,9 +177,20 @@ export class PlacesComponent implements OnInit {
     this.description.setValue('');
   }
 
+  showInfo(marker: Marker, mapmarker: MapMarker) {
+    this.iwContent = `
+    <h3>${marker.name}</h3>
+    <hr />
+    <p>${marker.description}</p>
+    `;
+    this.infoWindow.open(mapmarker);
+  }
+
 }// END PlacesComponent class
 
 interface Marker {
   options: google.maps.MarkerOptions,
-  position: google.maps.LatLngLiteral
+  position: google.maps.LatLngLiteral,
+  name: string,
+  description: string
 }

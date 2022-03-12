@@ -25,9 +25,12 @@
       [options]="options"
       (mapRightclick)="addMarker($event)"
     >
-        <map-marker *ngFor="let marker of markers"
+        <map-marker #mapmarker="mapMarker"
+            *ngFor="let marker of markers"
             [position]="marker.position"
-            [options]="marker.options"></map-marker>
+            [options]="marker.options"
+            (mapClick)="showInfo(marker, mapmarker)"
+            ></map-marker>
         <map-info-window>
             <div [innerHTML]="iwContent"></div>
         </map-info-window>
