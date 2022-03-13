@@ -1,4 +1,5 @@
 environment.prod.ts
+.env.ts
 
 # Compiled output
 /dist
