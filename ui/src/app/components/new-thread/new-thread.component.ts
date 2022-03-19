@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Thread } from 'src/app/models/thread';
 import { User } from 'src/app/models/user';
@@ -15,7 +16,6 @@ export class NewThreadComponent implements OnInit {
 
   public fid: number = 0;
   public currentUser?: User;
-  // public token: string = '';
   public thread: Thread = new Thread;
   titleControl: FormControl = new FormControl('');
   msgControl: FormControl = new FormControl('');
@@ -26,6 +26,7 @@ export class NewThreadComponent implements OnInit {
     private router: Router,
     private forumService: ForumService,
     private auth: AuthService,
+    private title: Title,
     ) {
     this.auth.user.subscribe( user => this.currentUser = user);
   }
@@ -33,6 +34,7 @@ export class NewThreadComponent implements OnInit {
   ngOnInit(): void {
     const routeParams = this.route.snapshot.paramMap;
     this.fid = Number(routeParams.get('id'));
+    this.title.setTitle('LGR: Create new discussion thread');
   }
 
   createThread() {

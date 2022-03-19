@@ -42,8 +42,6 @@ export class MainComponent implements OnInit {
           this.forums.push(forum);
         });
       },
-      error: (err) => { console.log('Error: ' + err); },
-      complete: () => { console.log('MainComponent: Completed GET Forums'); },
     });
     this.stateForm = this.fb.group({
       state: [0]
@@ -51,8 +49,7 @@ export class MainComponent implements OnInit {
   }
 
   update() {
-    console.log(this.stateForm.value)
-    this.router.navigateByUrl('/forum/' + this.stateForm.value.state)
+    this.router.navigateByUrl('/forum/' + this.stateForm.value.state);
   }
 
 

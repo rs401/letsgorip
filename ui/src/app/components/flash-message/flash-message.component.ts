@@ -19,9 +19,6 @@ export class FlashMessageComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     this.manageMessage(changes['message'].currentValue);
-
-    console.log(changes['message'].currentValue);// current selected value
-    console.log(changes['message'].previousValue);// previous selected value
 }
 manageMessage(message: string) {
     if (message && message.length > 0) {

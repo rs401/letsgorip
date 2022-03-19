@@ -71,6 +71,35 @@ export class AuthService {
     return true;
   }
 
+  checkToken(): Observable<boolean> {
+    return this.http.get(
+      `${this.ROOT_URL}/user/checktoken/`,
+      {
+        headers: new HttpHeaders({
+          Authorization: this.token,
+        }),
+        observe: 'response',
+        responseType: 'json',
+        withCredentials: true,
+      },
+    ).pipe(
+      map(response => {
+        console.log('AuthService >> checkToken response: ' + response.ok);
+        if(response.ok) {
+          return true;
+        } else {
+          this.signout();
+          return false;
+        }
+      }),
+      catchError((err) => {
+        console.log('err.status: ' + err.status);
+        this.signout();
+        throw err;
+      }),
+    );
+  }
+
   getUser(id: number): Observable<User> {
     // let tmpUser: User = new User;
     return this.http.get<User>(

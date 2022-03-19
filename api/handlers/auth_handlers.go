@@ -24,6 +24,7 @@ type AuthHandlers interface {
 	GetUser(w http.ResponseWriter, r *http.Request)
 	GetUsers(w http.ResponseWriter, r *http.Request)
 	DeleteUser(w http.ResponseWriter, r *http.Request)
+	CheckToken(w http.ResponseWriter, r *http.Request)
 }
 
 type authHandlers struct {
@@ -64,9 +65,10 @@ func (ah *authHandlers) SignUp(w http.ResponseWriter, r *http.Request) {
 		// Set refresh token in cookie
 		http.SetCookie(w,
 			&http.Cookie{
-				Name:    "refresh_token",
-				Value:   tokens.RefreshToken,
-				Expires: time.Now().Add(time.Hour * 24),
+				Name:     "refresh_token",
+				Value:    tokens.RefreshToken,
+				Expires:  time.Now().Add(time.Hour * 24),
+				SameSite: http.SameSiteLaxMode,
 			})
 	}
 	// Let them know
@@ -107,9 +109,10 @@ func (ah *authHandlers) SignIn(w http.ResponseWriter, r *http.Request) {
 		// Set refresh token in cookie
 		http.SetCookie(w,
 			&http.Cookie{
-				Name:    "refresh_token",
-				Value:   tokens.RefreshToken,
-				Expires: time.Now().Add(time.Hour * 24),
+				Name:     "refresh_token",
+				Value:    tokens.RefreshToken,
+				Expires:  time.Now().Add(time.Hour * 24),
+				SameSite: http.SameSiteLaxMode,
 			})
 	}
 	// Let them know
@@ -271,4 +274,20 @@ func (ah *authHandlers) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(map[string]string{"delete": "success"})
+}
+
+func (ah *authHandlers) CheckToken(w http.ResponseWriter, r *http.Request) {
+	token, err := tokenutils.VerifyToken(r)
+	if err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+		return
+	}
+	if !tokenutils.StillValid(token) {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{"valid": "true"})
 }

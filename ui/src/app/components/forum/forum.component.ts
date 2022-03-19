@@ -23,10 +23,7 @@ export class ForumComponent implements OnInit {
   ngOnInit(): void {
     const routeParams = this.route.snapshot.paramMap;
     this.fid = Number(routeParams.get('id'));
-    this.forumService.getForum(this.fid).subscribe({
-      next: (res) => {console.log('forumComponent: response: ' + res);},
-      error: (e) => {console.log('forumComponent: error: ' + JSON.stringify(e));},
-    });
+    this.forumService.getForum(this.fid).subscribe();
     
     this.forumService.getThreads(this.fid).subscribe({
       next: (res) => {
