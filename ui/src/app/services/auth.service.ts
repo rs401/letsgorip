@@ -14,6 +14,7 @@ export class AuthService {
   public token: string;
   readonly ROOT_URL = environment.root_url;
   cu?: User;
+  validToken: boolean = false;
 
   constructor(private http: HttpClient) {
     this.userSubject = new BehaviorSubject<User>(
@@ -68,6 +69,12 @@ export class AuthService {
     if (this.cu?.id === undefined) {
       return false;
     }
+    // user present
+    // this.checkToken().subscribe(valid => this.validToken = valid);
+    // if(!this.validToken) {
+    //   // token expired
+    //   return false;
+    // }
     return true;
   }
 
@@ -93,7 +100,7 @@ export class AuthService {
         }
       }),
       catchError((err) => {
-        console.log('err.status: ' + err.status);
+        console.log('auth-service catching err, err.status: ' + err.status);
         this.signout();
         throw err;
       }),
