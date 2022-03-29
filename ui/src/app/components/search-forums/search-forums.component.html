@@ -1,0 +1,12 @@
+<div
+  class="row rounded border"
+  *ngFor="let thread of threads; even as isEven"
+  [class]="isEven ? 'even' : 'odd'"
+>
+  <div class="py-3" (click)="viewThread(thread)">
+    <span class="state">
+        {{ stateAbrs[thread.forum_id! - 1] }}
+    </span>
+      {{ thread.title }}
+  </div>
+</div>

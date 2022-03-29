@@ -23,6 +23,7 @@ import { UserCardComponent } from './components/user-card/user-card.component';
 import { PlacesComponent } from './components/places/places.component';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { SearchForumsComponent } from './components/search-forums/search-forums.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
     RulesComponent,
     ScrollTextComponent,
     UserCardComponent,
-    PlacesComponent
+    PlacesComponent,
+    SearchForumsComponent
   ],
   imports: [
     BrowserModule,

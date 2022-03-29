@@ -3,6 +3,7 @@ package repository
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/rs401/letsgorip/db"
 	"github.com/rs401/letsgorip/forums/models"
@@ -31,6 +32,7 @@ type ForumsRepository interface {
 	DeleteForum(id uint64) error
 	DeleteThread(id uint64) error
 	DeletePost(id uint64) error
+	SearchForum(key string) ([]*models.Thread, error)
 }
 
 type forumsRepository struct {
@@ -91,4 +93,15 @@ func (fr *forumsRepository) DeleteForum(id uint64) error {
 // DeleteAllForums deletes all forums from the database.
 func (fr *forumsRepository) DeleteAllForums() error {
 	return fr.db.Exec("DELETE FROM forums").Error
+}
+
+func (fr *forumsRepository) SearchForum(key string) (threads []*models.Thread, err error) {
+	var tmpThreads []*models.Thread
+	result := fr.db.Find(&tmpThreads)
+	for _, t := range tmpThreads {
+		if strings.Contains(t.Title, key) || strings.Contains(t.Msg, key) {
+			threads = append(threads, t)
+		}
+	}
+	return threads, result.Error
 }

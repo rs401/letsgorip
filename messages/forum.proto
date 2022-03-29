@@ -74,10 +74,6 @@ message ForumSearchRequest {
     string key = 1;
 }
 
-message ForumSearchResponse {
-    repeated Thread threads = 1;
-}
-
 service ForumService {
     rpc CreateForum(Forum) returns (ForumIdResponse);
     rpc CreateThread(Thread) returns (ForumIdResponse);
@@ -94,4 +90,5 @@ service ForumService {
     rpc DeleteForum(ForumIdRequest) returns (ForumIdResponse);
     rpc DeleteThread(ForumIdRequest) returns (ForumIdResponse);
     rpc DeletePost(ForumIdRequest) returns (ForumIdResponse);
+    rpc SearchForum(ForumSearchRequest) returns (stream Thread);
 }

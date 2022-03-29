@@ -267,3 +267,17 @@ func (fs *forumService) DeletePost(ctx context.Context, req *pb.ForumIdRequest) 
 	}
 	return &pb.ForumIdResponse{Id: req.GetId()}, nil
 }
+
+func (fs *forumService) SearchForum(req *pb.ForumSearchRequest, stream pb.ForumService_SearchForumServer) error {
+	threads, err := fs.forumsRepository.SearchForum(req.GetKey())
+	if err != nil {
+		return err
+	}
+	for _, thread := range threads {
+		err := stream.Send(thread.ToProtoBuffer())
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

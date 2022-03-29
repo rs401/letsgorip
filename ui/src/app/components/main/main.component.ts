@@ -12,7 +12,6 @@ import { ForumService } from 'src/app/services/forum.service';
 })
 export class MainComponent implements OnInit {
   
-
   public forums: Forum[] = [];
   public stateForm!: FormGroup;
   // private source = timer(1000, 3000);

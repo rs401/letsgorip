@@ -31,6 +31,7 @@ func SetupRoutes(r *mux.Router, authHandleFuncs handlers.AuthHandlers, forumHand
 	// Forum routes
 	r.HandleFunc("/api/forum/", forumHandleFuncs.GetForums).Methods("GET")
 	r.HandleFunc("/api/forum/{fid:[0-9]+}/", forumHandleFuncs.GetForum).Methods("GET")
+	r.HandleFunc("/api/forum/{query}/", forumHandleFuncs.SearchForums).Methods("GET")
 	// Thread routes
 	r.HandleFunc("/api/forum/{fid:[0-9]+}/thread/", forumHandleFuncs.GetThreads).Methods("GET")
 	r.HandleFunc("/api/forum/{fid:[0-9]+}/thread/{tid:[0-9]+}/", forumHandleFuncs.GetThread).Methods("GET")
