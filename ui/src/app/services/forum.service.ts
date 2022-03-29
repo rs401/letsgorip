@@ -36,6 +36,10 @@ export class ForumService {
     return this.http.get<Thread[]>(`${this.ROOT_URL}/forum/${id}/thread/`);
   }
 
+  searchThreads(key: string) {
+    return this.http.get<Thread[]>(`${this.ROOT_URL}/forum/${key}/`);
+  }
+
   getPosts(id: number, tid: number) {
     return this.http.get<Post[]>(`${this.ROOT_URL}/forum/${id}/thread/${tid}/post/`);
   }

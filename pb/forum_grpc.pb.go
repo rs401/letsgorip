@@ -37,6 +37,7 @@ type ForumServiceClient interface {
 	DeleteForum(ctx context.Context, in *ForumIdRequest, opts ...grpc.CallOption) (*ForumIdResponse, error)
 	DeleteThread(ctx context.Context, in *ForumIdRequest, opts ...grpc.CallOption) (*ForumIdResponse, error)
 	DeletePost(ctx context.Context, in *ForumIdRequest, opts ...grpc.CallOption) (*ForumIdResponse, error)
+	SearchForum(ctx context.Context, in *ForumSearchRequest, opts ...grpc.CallOption) (ForumService_SearchForumClient, error)
 }
 
 type forumServiceClient struct {
@@ -251,6 +252,38 @@ func (c *forumServiceClient) DeletePost(ctx context.Context, in *ForumIdRequest,
 	return out, nil
 }
 
+func (c *forumServiceClient) SearchForum(ctx context.Context, in *ForumSearchRequest, opts ...grpc.CallOption) (ForumService_SearchForumClient, error) {
+	stream, err := c.cc.NewStream(ctx, &ForumService_ServiceDesc.Streams[3], "/pb.ForumService/SearchForum", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &forumServiceSearchForumClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type ForumService_SearchForumClient interface {
+	Recv() (*Thread, error)
+	grpc.ClientStream
+}
+
+type forumServiceSearchForumClient struct {
+	grpc.ClientStream
+}
+
+func (x *forumServiceSearchForumClient) Recv() (*Thread, error) {
+	m := new(Thread)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // ForumServiceServer is the server API for ForumService service.
 // All implementations must embed UnimplementedForumServiceServer
 // for forward compatibility
@@ -270,6 +303,7 @@ type ForumServiceServer interface {
 	DeleteForum(context.Context, *ForumIdRequest) (*ForumIdResponse, error)
 	DeleteThread(context.Context, *ForumIdRequest) (*ForumIdResponse, error)
 	DeletePost(context.Context, *ForumIdRequest) (*ForumIdResponse, error)
+	SearchForum(*ForumSearchRequest, ForumService_SearchForumServer) error
 	mustEmbedUnimplementedForumServiceServer()
 }
 
@@ -321,6 +355,9 @@ func (UnimplementedForumServiceServer) DeleteThread(context.Context, *ForumIdReq
 }
 func (UnimplementedForumServiceServer) DeletePost(context.Context, *ForumIdRequest) (*ForumIdResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeletePost not implemented")
+}
+func (UnimplementedForumServiceServer) SearchForum(*ForumSearchRequest, ForumService_SearchForumServer) error {
+	return status.Errorf(codes.Unimplemented, "method SearchForum not implemented")
 }
 func (UnimplementedForumServiceServer) mustEmbedUnimplementedForumServiceServer() {}
 
@@ -614,6 +651,27 @@ func _ForumService_DeletePost_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ForumService_SearchForum_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ForumSearchRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(ForumServiceServer).SearchForum(m, &forumServiceSearchForumServer{stream})
+}
+
+type ForumService_SearchForumServer interface {
+	Send(*Thread) error
+	grpc.ServerStream
+}
+
+type forumServiceSearchForumServer struct {
+	grpc.ServerStream
+}
+
+func (x *forumServiceSearchForumServer) Send(m *Thread) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // ForumService_ServiceDesc is the grpc.ServiceDesc for ForumService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -684,6 +742,11 @@ var ForumService_ServiceDesc = grpc.ServiceDesc{
 		{
 			StreamName:    "GetPosts",
 			Handler:       _ForumService_GetPosts_Handler,
+			ServerStreams: true,
+		},
+		{
+			StreamName:    "SearchForum",
+			Handler:       _ForumService_SearchForum_Handler,
 			ServerStreams: true,
 		},
 	},

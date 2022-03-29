@@ -31,6 +31,7 @@ type ForumHandlers interface {
 	DeleteForum(w http.ResponseWriter, r *http.Request)
 	DeleteThread(w http.ResponseWriter, r *http.Request)
 	DeletePost(w http.ResponseWriter, r *http.Request)
+	SearchForums(w http.ResponseWriter, r *http.Request)
 }
 
 type forumHandlers struct {
@@ -644,4 +645,49 @@ func (fh *forumHandlers) DeletePost(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(map[string]string{"delete": "success"})
+}
+
+func (fh *forumHandlers) SearchForums(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	var req pb.ForumSearchRequest
+	var threads []*models.Thread = make([]*models.Thread, 0)
+	var pbThreads []*pb.Thread = make([]*pb.Thread, 0)
+	query := vars["query"]
+	req.Key = query
+
+	done := make(chan bool)
+	getThreadsStream, err := fh.forumSvcClient.SearchForum(r.Context(), &req)
+	if err != nil {
+		log.Printf("Error calling SearchForum: %v\n", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+		return
+	}
+
+	go func() {
+		for {
+			response, err := getThreadsStream.Recv()
+			if err == io.EOF {
+				done <- true
+				return
+			}
+			if err != nil {
+				log.Printf("Error receiving search forums stream")
+				done <- false
+				return
+			}
+			pbThreads = append(pbThreads, response)
+		}
+	}()
+
+	if <-done {
+		for _, t := range pbThreads {
+			thread := &models.Thread{}
+			thread.FromProtoBuffer(t)
+			threads = append(threads, thread)
+		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(threads)
 }

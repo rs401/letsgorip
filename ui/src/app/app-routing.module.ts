@@ -8,6 +8,7 @@ import { NewThreadComponent } from './components/new-thread/new-thread.component
 import { PlacesComponent } from './components/places/places.component';
 import { PrivacyComponent } from './components/privacy/privacy.component';
 import { RulesComponent } from './components/rules/rules.component';
+import { SearchForumsComponent } from './components/search-forums/search-forums.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { ThreadComponent } from './components/thread/thread.component';
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'privacy', component: PrivacyComponent },
   { path: 'rules', component: RulesComponent },
   { path: 'places', component: PlacesComponent },
+  { path: 'search/:query', component: SearchForumsComponent },
   { 
     path: 'forum',
     children: [

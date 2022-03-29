@@ -1,0 +1,26 @@
+.even {
+    background-color: #395159;
+    color: #efefef;
+    cursor: pointer;
+}
+
+.even:hover {
+    filter: brightness(1.4);
+}
+
+.odd {
+    background-color: #23303d;
+    color: #efefef;
+    cursor: pointer;
+}
+
+.odd:hover {
+    filter: brightness(1.4);
+}
+
+.state {
+    font-weight: 700;
+    padding-right: 1rem;
+    margin-right: 1rem;
+    border-right: 2px solid white;
+}
