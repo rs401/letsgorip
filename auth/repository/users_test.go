@@ -87,9 +87,11 @@ func TestSave(t *testing.T) {
 		name: "Save User",
 		db:   conn.DB(),
 		user: &models.User{
-			Name:     "TestUser1",
-			Email:    "testuser1@test.com",
-			Password: []byte("testpassword"),
+			Uid:           "TestUser1",
+			Name:          "TestUser1",
+			Email:         "testuser1@test.com",
+			EmailVerified: true,
+			Picture:       "",
 		},
 		wantErr: false,
 	}
@@ -124,9 +126,11 @@ func TestSaveAndGetById(t *testing.T) {
 		name: "Save User",
 		db:   conn.DB(),
 		user: &models.User{
-			Name:     "TestUser2",
-			Email:    "testuser2@test.com",
-			Password: []byte("testpassword"),
+			Uid:           "TestUser2",
+			Name:          "TestUser2",
+			Email:         "testuser2@test.com",
+			EmailVerified: true,
+			Picture:       "",
 		},
 		wantErr: false,
 	}
@@ -182,9 +186,11 @@ func TestSaveAndGetByEmail(t *testing.T) {
 		name: "Save User",
 		db:   conn.DB(),
 		user: &models.User{
-			Name:     "TestUser3",
-			Email:    "testuser3@test.com",
-			Password: []byte("testpassword"),
+			Uid:           "TestUser3",
+			Name:          "TestUser3",
+			Email:         "testuser3@test.com",
+			EmailVerified: true,
+			Picture:       "",
 		},
 		wantErr: false,
 	}
@@ -226,9 +232,11 @@ func TestUpdate(t *testing.T) {
 	assert.NoError(t, err)
 
 	testUser := &models.User{
-		Name:     "TestUser4",
-		Email:    "testuser4@test.com",
-		Password: []byte("testpassword"),
+		Uid:           "TestUser4",
+		Name:          "TestUser4",
+		Email:         "testuser4@test.com",
+		EmailVerified: true,
+		Picture:       "",
 	}
 	// Guaranty a user exists
 	testSave := struct {

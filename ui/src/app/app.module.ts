@@ -21,7 +21,7 @@ import { RulesComponent } from './components/rules/rules.component';
 import { ScrollTextComponent } from './components/scroll-text/scroll-text.component';
 import { UserCardComponent } from './components/user-card/user-card.component';
 import { PlacesComponent } from './components/places/places.component';
-import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { HashLocationStrategy, LocationStrategy, PathLocationStrategy } from '@angular/common';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { SearchForumsComponent } from './components/search-forums/search-forums.component';
 

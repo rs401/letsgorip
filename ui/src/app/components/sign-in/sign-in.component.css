@@ -8,3 +8,14 @@
     padding-top: 2em;
     align-items: center;
 }
+
+.right-side {
+    display: flex;
+    justify-content: space-between;
+    max-height: 300px;
+    height: 300px;
+}
+
+.spacing {
+    width: 157px;
+}

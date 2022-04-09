@@ -17,6 +17,7 @@ import { AuthGuardGuard } from './services/auth-guard.guard';
 
 const routes: Routes = [
   { path: '', component: MainComponent },
+  { path: 'sign-in/:creds', component: SignInComponent },
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'tos', component: TosComponent },
@@ -36,7 +37,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {useHash: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

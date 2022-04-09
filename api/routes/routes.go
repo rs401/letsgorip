@@ -22,7 +22,7 @@ func SetupRoutes(r *mux.Router, authHandleFuncs handlers.AuthHandlers, forumHand
 	})
 
 	// Auth routes
-	r.HandleFunc("/api/signup/", authHandleFuncs.SignUp).Methods("POST")
+	// r.HandleFunc("/api/signup/", authHandleFuncs.SignUp).Methods("POST")
 	r.HandleFunc("/api/signin/", authHandleFuncs.SignIn).Methods("POST")
 	r.HandleFunc("/api/user/", authHandleFuncs.GetUsers).Methods("GET")
 	r.HandleFunc("/api/user/checktoken", authHandleFuncs.CheckToken).Methods("GET")

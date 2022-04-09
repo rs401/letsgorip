@@ -14,27 +14,52 @@ export class SignInComponent implements OnInit {
   passwordControl: FormControl = new FormControl('');
   signInMessage: string = '';
   returnURL!: string;
+  callbackCreds: string | null = null;
 
   constructor(
     private auth: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    ) { }
-
-  ngOnInit(): void {
+  ) {
     this.returnURL = this.route.snapshot.queryParams['returnUrl'] || '/';
+    const routeParams = this.route.snapshot.paramMap;
+    this.callbackCreds = routeParams.get('creds');
+    if (this.callbackCreds != null && this.callbackCreds != undefined) {
+      // unwrap the jwt, verify it, send it to back-end.
+      this.auth.verifyToken(this.callbackCreds).subscribe({
+        next: (response) => {
+          this.gAuthSignIn(response);
+        }
+      });
+    }
   }
 
-  signin(){
+  gAuthSignIn(response: Object) {
+    try {
+      this.auth.gAuthSignIn(response).subscribe({
+        next:  (res) => {
+          this.router.navigateByUrl(this.returnURL);
+        },
+        error: (err) => { this.showFlashMessage(err.error.error) },
+        complete: () => console.info('gAuthSignIn complete')
+      });
+    } catch (error: any) {
+      this.showFlashMessage(error);
+    }
+  }
+
+  ngOnInit(): void { }
+
+  signin() {
     const email = this.emailControl.value;
     const password = this.passwordControl.value;
-    if(email && password) {
+    if (email && password) {
       this.auth.signin(email, password).subscribe({
         next: (res) => {
           this.router.navigateByUrl(this.returnURL);
         },
-        error: (err) => {this.showFlashMessage(err.error.error)},
-        complete: () => console.info('complete')
+        error: (err) => { this.showFlashMessage(err.error.error) },
+        complete: () => console.info('signin complete')
       });
     } else {
       this.showFlashMessage("Email and Password cannot be empty.");

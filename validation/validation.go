@@ -13,6 +13,8 @@ import (
 )
 
 var (
+	// ErrEmptyUid error for empty uid
+	ErrEmptyUid = errors.New("uid cannot be empty")
 	// ErrEmptyName error for empty name
 	ErrEmptyName = errors.New("name cannot be empty")
 	// ErrEmptyEmail error for empty email
@@ -42,20 +44,17 @@ var (
 
 // IsValidSignUp takes a *SignUpRequest and verifies if the request is valid
 func IsValidSignUp(user *pb.User) error {
+	if IsEmptyString(user.Uid) {
+		return ErrEmptyUid
+	}
 	if IsEmptyString(user.Name) {
 		return ErrEmptyName
 	}
 	if IsEmptyString(user.Email) {
 		return ErrEmptyEmail
 	}
-	if IsEmptyString(user.Password) {
-		return ErrEmptyPassword
-	}
 	if !IsValidEmail(user.Email) {
 		return ErrInvalidEmail
-	}
-	if !IsValidPassword(user.Password) {
-		return ErrInvalidPassword
 	}
 
 	return nil

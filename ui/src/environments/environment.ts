@@ -5,7 +5,8 @@ import { env } from '../../.env';
 export const environment = {
   production: false,
   root_url: 'http://localhost:9000/api',
-  map_api_key: env.map_api_key
+  map_api_key: env.map_api_key,
+  gauth_client_id: '627060646286-48sdcbk1db7pv4sh7295qs38v41mnqek.apps.googleusercontent.com'
 };
 
 /*

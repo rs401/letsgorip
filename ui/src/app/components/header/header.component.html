@@ -19,7 +19,7 @@
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" routerLink="/rules">Rules</a></li>
               <li><a class="dropdown-item" routerLink="/tos">Terms Of Service</a></li>
-              <li><a class="dropdown-item" routerLink="/privacy">Pricacy Policy</a></li>
+              <li><a class="dropdown-item" routerLink="/privacy">Privacy Policy</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" href="mailto:rich.stadnick@gmail.com">Contact Us</a></li>
             </ul>
@@ -32,7 +32,10 @@
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <div *ngIf="this.user?.id == undefined; else elseBlock">
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="sign-in">Sign-in/Sign-up</a>
+                    <!-- 
+                        <a class="nav-link" routerLink="sign-in">Sign-in/Sign-up</a>
+                    -->
+                    <div id="gOauthDiv"></div>
                 </li>
             </div>
             <ng-template #elseBlock>
