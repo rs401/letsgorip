@@ -1,20 +1,75 @@
-<div class="sign-in-form">
-    <div class="form-group">
-        <legend>Sign In</legend>
-        <app-flash-message [message]='signInMessage'></app-flash-message>
-        <div class="form-group">
-            <label>Email:</label>
-            <input class="form-control" type="email" [formControl]="emailControl" placeholder="Email">
-        </div>
-        <div class="form-group">
-            <label>Password:</label>
-            <input class="form-control" type="password" [formControl]="passwordControl">
-        </div>
+<div>
+
+    <div class="right-side">
+        <div class="spacing"></div>
+        <div class="pt-4"><h3>Please Sign In First</h3></div>
+      <svg
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:x="http://ns.adobe.com/Extensibility/1.0/"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:i="http://ns.adobe.com/AdobeIllustrator/10.0/"
+        xmlns:cc="http://web.resource.org/cc/"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:a="http://ns.adobe.com/AdobeSVGViewerExtensions/3.0/"
+        xmlns:graph="http://ns.adobe.com/Graphs/1.0/"
+        xmlns:svg="http://www.w3.org/2000/svg"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns:ns1="http://sozi.baierouge.fr"
+        i:rulerOrigin="0 0"
+        i:viewOrigin="196 606"
+        space="preserve"
+        i:pageBounds="0 792 612 0"
+        viewBox="0 0 220 420"
+        enable-background="new 0 0 220 420"
+        overflow="visible"
+      >
+        <g
+          id="Layer_1"
+          i:layer="yes"
+          i:rgbTrio="#4F008000FFFF"
+          i:dimmedPercent="50"
+        >
+          <g>
+            <rect width="220" height="420" i:knockout="Off" fill="#FFFFFF" />
+            <path
+              stroke-linejoin="round"
+              d="m10.5 110.5l100-100 100 100h-50v300h-100v-300h-50zm0 0"
+              i:knockout="Off"
+              stroke="#FF2900"
+              stroke-linecap="round"
+              stroke-miterlimit="1"
+              stroke-width="10"
+              fill="none"
+            />
+          </g>
+        </g>
+      </svg>
+
     </div>
-    <div class="form-group pt-2">
-        <button class="btn btn-primary" (click)="signin()">Sign In</button>
-        <hr>
-        <span class="form-text">Not a member yet?</span><br>
-        <a class="btn btn-primary mt-2" routerLink="../sign-up" routerLinkActive="active">Sign Up</a>
+    <div class="sign-in-form">
+      <app-flash-message [message]="signInMessage"></app-flash-message>
+    
+      <!--
+            <div class="form-group">
+                <legend>Sign In</legend>
+                <div class="form-group">
+                    <label>Email:</label>
+                    <input class="form-control" type="email" [formControl]="emailControl" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <label>Password:</label>
+                    <input class="form-control" type="password" [formControl]="passwordControl">
+                </div>
+            </div>
+            <div class="form-group pt-2">
+                <button class="btn btn-primary" (click)="signin()">Sign In</button>
+                <hr>
+                <span class="form-text">Not a member yet?</span><br>
+                <a class="btn btn-primary mt-2" routerLink="../sign-up" routerLinkActive="active">Sign Up</a>
+            </div>
+    
+        -->
     </div>
 </div>

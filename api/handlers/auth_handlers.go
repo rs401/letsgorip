@@ -18,7 +18,7 @@ import (
 
 // AuthHandlers interface defining HandlerFuncs
 type AuthHandlers interface {
-	SignUp(w http.ResponseWriter, r *http.Request)
+	// SignUp(w http.ResponseWriter, r *http.Request)
 	SignIn(w http.ResponseWriter, r *http.Request)
 	UpdateUser(w http.ResponseWriter, r *http.Request)
 	GetUser(w http.ResponseWriter, r *http.Request)
@@ -36,55 +36,56 @@ func NewAuthHandlers(authSvcClient pb.AuthServiceClient) AuthHandlers {
 	return &authHandlers{authSvcClient: authSvcClient}
 }
 
-// SignUp handles calling the Client.SignUp method
-func (ah *authHandlers) SignUp(w http.ResponseWriter, r *http.Request) {
-	var user models.User
-	var pbUser pb.User
-	err := json.NewDecoder(r.Body).Decode(&pbUser)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": "json formating decode error"})
-		return
-	}
+// // SignUp handles calling the Client.SignUp method
+// func (ah *authHandlers) SignUp(w http.ResponseWriter, r *http.Request) {
+// 	var user models.User
+// 	var pbUser pb.User
+// 	err := json.NewDecoder(r.Body).Decode(&pbUser)
+// 	if err != nil {
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		json.NewEncoder(w).Encode(map[string]string{"error": "json formating decode error"})
+// 		return
+// 	}
 
-	result, err := ah.authSvcClient.SignUp(r.Context(), &pbUser)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
-		return
-	}
+// 	result, err := ah.authSvcClient.SignUp(r.Context(), &pbUser)
+// 	if err != nil {
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		json.NewEncoder(w).Encode(map[string]string{"error": err.Error()})
+// 		return
+// 	}
 
-	// Might as well create tokens so they don't have to log in
-	tokens, err := tokenutils.CreateToken(uint(result.Id))
-	if err != nil {
-		log.Printf("Unable to create tokens after signup: %v\n", err)
-	}
-	if tokens != nil {
-		// Set access token in auth header
-		w.Header().Set("Authorization", fmt.Sprintf("Bearer %v", tokens.AccessToken))
-		// Set refresh token in cookie
-		http.SetCookie(w,
-			&http.Cookie{
-				Name:     "refresh_token",
-				Value:    tokens.RefreshToken,
-				Expires:  time.Now().Add(time.Hour * 24),
-				SameSite: http.SameSiteLaxMode,
-			})
-	}
-	// Let them know
-	user.FromProtoBuffer(&pbUser)
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(user)
-}
+// 	// Might as well create tokens so they don't have to log in
+// 	tokens, err := tokenutils.CreateToken(uint(result.Id))
+// 	if err != nil {
+// 		log.Printf("Unable to create tokens after signup: %v\n", err)
+// 	}
+// 	if tokens != nil {
+// 		// Set access token in auth header
+// 		w.Header().Set("Authorization", fmt.Sprintf("Bearer %v", tokens.AccessToken))
+// 		// Set refresh token in cookie
+// 		http.SetCookie(w,
+// 			&http.Cookie{
+// 				Name:     "refresh_token",
+// 				Value:    tokens.RefreshToken,
+// 				Expires:  time.Now().Add(time.Hour * 24),
+// 				SameSite: http.SameSiteLaxMode,
+// 			})
+// 	}
+// 	// Let them know
+// 	user.FromProtoBuffer(&pbUser)
+// 	w.WriteHeader(http.StatusCreated)
+// 	json.NewEncoder(w).Encode(user)
+// }
 
 // SignIn handles calling the Client.SignIn method
 func (ah *authHandlers) SignIn(w http.ResponseWriter, r *http.Request) {
-	var signReq pb.SignInRequest
+	var signReq pb.User
 	var user models.User
 	err := json.NewDecoder(r.Body).Decode(&signReq)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		json.NewEncoder(w).Encode(map[string]string{"error": "json formating decode error"})
+		log.Printf("Friggin json formating decode error: %v\n", err)
 		return
 	}
 	result, err := ah.authSvcClient.SignIn(r.Context(), &signReq)

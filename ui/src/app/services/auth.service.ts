@@ -69,12 +69,6 @@ export class AuthService {
     if (this.cu?.id === undefined) {
       return false;
     }
-    // user present
-    // this.checkToken().subscribe(valid => this.validToken = valid);
-    // if(!this.validToken) {
-    //   // token expired
-    //   return false;
-    // }
     return true;
   }
 
@@ -113,6 +107,51 @@ export class AuthService {
       `${this.ROOT_URL}/user/${id}/`,
       { observe: "body", withCredentials: true }
     );
+  }
+
+  getUserByUid(uid: string): Observable<User> {
+    // let tmpUser: User = new User;
+    return this.http.get<User>(
+      `${this.ROOT_URL}/user/uid/${uid}/`,
+      { observe: "body", withCredentials: true }
+    );
+  }
+
+  verifyToken(token: string): Observable<Object> {
+    return this.http.get(
+      `https://oauth2.googleapis.com/tokeninfo?id_token=${token}`,
+      { observe: "body"}
+      ).pipe();
+  }
+  
+  gAuthSignIn(response: any) {
+    // Check that the aud claim contains app client ID
+    if(response.aud !== environment.gauth_client_id) {
+      // Token is valid from Google but not from our app.
+      console.log('Error. Valid token from wrong app: ' + JSON.stringify(response));
+      throw new Error("invalid token audience");
+    }
+    // Post User signin
+    return this.http.post<User>(
+      `${this.ROOT_URL}/signin/`,
+      {
+        uid: response.sub,
+        name: response.name,
+        email: response.email,
+        email_verified: Boolean(response.email_verified),
+        picture: response.picture,
+      },
+      { observe: 'response', responseType: 'json', withCredentials: true }
+    )
+      .pipe(
+        tap((data) => {
+          let user: User = data.body as User;
+          this.token = String(data.headers.get('Authorization'));
+          localStorage.setItem('lgrToken', data.headers.get('Authorization') || '');
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.userSubject.next(user);
+        })
+      );
   }
 
 }

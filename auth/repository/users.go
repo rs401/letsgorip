@@ -17,6 +17,7 @@ var ErrorBadID error = errors.New("bad id")
 type UsersRepository interface {
 	Save(user *models.User) error
 	GetById(id uint64) (user *models.User, err error)
+	GetByUid(uid string) (user *models.User, err error)
 	GetByEmail(email string) (user *models.User, err error)
 	GetAll() (users []*models.User, err error)
 	Update(user *models.User) error
@@ -40,6 +41,11 @@ func (r *usersRepository) Save(user *models.User) error {
 // GetById takes an id and returns the user and an error.
 func (r *usersRepository) GetById(id uint64) (user *models.User, err error) {
 	result := r.db.Where("id = ?", id).First(&user)
+	return user, result.Error
+}
+
+func (r *usersRepository) GetByUid(uid string) (user *models.User, err error) {
+	result := r.db.Where("uid = ?", uid).First(&user)
 	return user, result.Error
 }
 

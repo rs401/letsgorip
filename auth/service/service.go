@@ -10,7 +10,6 @@ import (
 	"github.com/rs401/letsgorip/auth/repository"
 	"github.com/rs401/letsgorip/pb"
 	"github.com/rs401/letsgorip/validation"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type authService struct {
@@ -23,26 +22,78 @@ func NewAuthService(usersRepository repository.UsersRepository) pb.AuthServiceSe
 	return &authService{usersRepository: usersRepository}
 }
 
+// GetUser(context.Context, *GetUserRequest) (*User, error)
+// GetUserByUid(context.Context, *GetUserByUidRequest) (*User, error)
+// GetUserRole(context.Context, *GetUserRequest) (*GetUserRoleResponse, error)
+// AddUserToRole(context.Context, *AddUserToRoleRequest) (*User, error)
+// ListUsers(*ListUsersRequest, AuthService_ListUsersServer) error
+// UpdateUser(context.Context, *User) (*User, error)
+// DeleteUser(context.Context, *GetUserRequest) (*DeleteUserResponse, error)
+
 // SignUp validates the user and calls the repositories Save method.
-func (as *authService) SignUp(ctx context.Context, req *pb.User) (*pb.User, error) {
+// func (as *authService) SignUp(ctx context.Context, req *pb.User) (*pb.User, error) {
+// 	err := validation.IsValidSignUp(req)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	exists, err := as.usersRepository.GetByEmail(req.Email)
+// 	if exists.Name != "" {
+// 		return nil, validation.ErrEmailExists
+// 	}
+
+// 	if exists.Name == "" {
+// 		user := new(models.User)
+// 		user.Name = strings.TrimSpace(req.Name)
+// 		user.Email = validation.NormalizeEmail(req.Email)
+// 		hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
+// 		if err != nil {
+// 			return nil, err
+// 		}
+// 		user.Password = hash
+// 		user.Role = 0
+
+// 		err = as.usersRepository.Save(user)
+// 		if err != nil {
+// 			if strings.Contains(err.Error(), "duplicate") {
+// 				if strings.Contains(err.Error(), "name") {
+// 					return nil, validation.ErrNameExists
+// 				}
+// 				if strings.Contains(err.Error(), "email") {
+// 					return nil, validation.ErrEmailExists
+// 				}
+// 			}
+// 			return nil, err
+// 		}
+// 		return user.ToProtoBuffer(), nil
+// 	}
+
+// 	return nil, err
+
+// }
+
+// SignIn validates the user, checks if user exists and calls the repositories
+// Save method if the user does not exist.
+func (as *authService) SignIn(ctx context.Context, req *pb.User) (*pb.User, error) {
 	err := validation.IsValidSignUp(req)
 	if err != nil {
 		return nil, err
 	}
 	exists, err := as.usersRepository.GetByEmail(req.Email)
+	if err != nil {
+		return nil, err
+	}
+
 	if exists.Name != "" {
-		return nil, validation.ErrEmailExists
+		// User already in db
+		return exists.ToProtoBuffer(), nil
 	}
 
 	if exists.Name == "" {
 		user := new(models.User)
-		user.Name = strings.TrimSpace(req.Name)
-		user.Email = validation.NormalizeEmail(req.Email)
-		hash, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-		if err != nil {
-			return nil, err
-		}
-		user.Password = hash
+		user.Name = strings.TrimSpace(req.GetName())
+		user.Email = validation.NormalizeEmail(req.GetEmail())
+		user.EmailVerified = req.GetEmailVerified()
+		user.Picture = req.GetPicture()
 		user.Role = 0
 
 		err = as.usersRepository.Save(user)
@@ -64,23 +115,31 @@ func (as *authService) SignUp(ctx context.Context, req *pb.User) (*pb.User, erro
 
 }
 
-// SignIn verifies the user details and returns a user.
-func (as *authService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.User, error) {
-	user, err := as.usersRepository.GetByEmail(req.Email)
-	if err != nil {
-		return nil, err
-	}
-	err = bcrypt.CompareHashAndPassword(user.Password, []byte(req.Password))
-	if err != nil {
-		return nil, err
-	}
+// // SignIn verifies the user details and returns a user.
+// func (as *authService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.User, error) {
+// 	user, err := as.usersRepository.GetByEmail(req.Email)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	err = bcrypt.CompareHashAndPassword(user.Password, []byte(req.Password))
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return user.ToProtoBuffer(), nil
-}
+// 	return user.ToProtoBuffer(), nil
+// }
 
 // GetUser takes a GetUserRequest and retrieves and returns the user.
 func (as *authService) GetUser(ctx context.Context, req *pb.GetUserRequest) (*pb.User, error) {
 	user, err := as.usersRepository.GetById(req.Id)
+	if err != nil {
+		return nil, err
+	}
+	return user.ToProtoBuffer(), nil
+}
+
+func (as *authService) GetUserByUid(ctx context.Context, req *pb.GetUserByUidRequest) (*pb.User, error) {
+	user, err := as.usersRepository.GetByUid(req.Uid)
 	if err != nil {
 		return nil, err
 	}
