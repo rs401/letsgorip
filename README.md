@@ -84,7 +84,23 @@
 
 This project is a work in progress ~~that does not yet have a live demo~~ that can be seen at [https://www.letsgo.rip](https://www.letsgo.rip).
 
-Lets Go Rip is a project to show potential employers my capabilities. The project is written in Go(lang) and has microservices for Auth, Forums, Places and an HTTP API. I used this project to learn more about gRPC and Kubernetes. I used Angular for the front end. The app is currently running in a Google Kubernetes Engine (GKE) cluster. 
+Lets Go Rip is a portfolio project. The project is written in Go(lang) and has microservices for Auth, Forums, Places and an HTTP API. I used this project to learn more about gRPC and Kubernetes. I use PostgreSQL for my data store and Angular for the front end. The app is currently running in a cluster on Google Kubernetes Engine (GKE). 
+
+## The Journey
+
+After finishing school and learning 4 languages in the process (C++, C#, Java, Python), I felt the need to pick a language and start a great portfolio project. Looking around a little in different communities and job postings, I decided to learn Go and build microservice's. I wanted to learn more about Kubernetes so I needed the services to be deployed in easily replicable containers for scaling and be ephemeral for easy CD. I also wanted to learn about gRPC because some article or click baity title somewhere, painted gRPC as a "Hot Topic", I also love learning so adding another concept to the list seemed like a good idea.
+
+### Challenges
+
+First challenge was finding out what gRPC is and how it works. I found that gRPC is an RPC framework that uses protocol buffers to define how data is to be structured. You define your data structures as "Messages", because your data will be transmitted as a message. You define your service with RPC functions that use messages as parameters and return types. Once messages and services are defined, the protocol buffer compiler (protoc) can be used to generate code in the language of your choosing. The generate code defines service and client interfaces to be used to transmit the messages. The messages will be serialized into a compact binary format and transmitted.
+
+OK, so I planned out my data structures and basic CRUD methods for services in .proto files and compiled them. Next challenge was implementing the services servers. This consisted of creating the data structures as models (so I can add gorm tags as I will be using gorm as my ORM), creating repository interfaces to utilize gorm for database storage and create a service structure that implements the protocol buffers NameServiceServer interface. The structure that implements the ServiceServer interface receives a repository, the service methods call the repository methods to interact with the data store. The service methods also convert the data into the protocol buffers data structures. Once the service methods are sorted out, all that's left is to create a grpc.NewServer(), register the service with the server and listen on my chosen port.
+
+After my services were all set, I created an HTTP API that has separate handlers for each service, each handler implementing the given services NameServiceClient interface.
+
+To be continued...
+
+
 
 
 <p align="right">(<a href="#top">back to top</a>)</p>
@@ -175,15 +191,15 @@ To run this application you will need to install the prerequisites and use the d
 - [x] Build k8s configs with label selectors and environment variables for communication
 - [x] Build k8s configs for services
 - [x] Rebuild images for k8s
-- [ ] UI
+- [x] UI
     - [x] Models
     - [x] Auth components
     - [x] Forum components
     - [x] Thread components
-    - [ ] Post components
-    - [ ] Places components
-        - [ ] Google maps
-- [ ] GKE
+    - [x] Post components
+    - [x] Places components
+        - [x] Google maps
+- [x] GKE
     - [x] Setup cluster
     - [x] Setup artifact registry
         - [x] Push images to registry
@@ -192,6 +208,7 @@ To run this application you will need to install the prerequisites and use the d
     - [x] Setup ingress
     - [x] Setup SSL certificates with GKE
     - [x] Setup Persistent Volume for Postgres db
+- [x] Add Google OAuth for identity
 
 See the [open issues](https://github.com/rs401/letsgorip/issues) for a full list of proposed features (and known issues).
 
